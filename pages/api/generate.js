@@ -13,6 +13,7 @@ export default function handler(req, res) {
     const doc = new Docxtemplater(zip, {
       paragraphLoop: true,
       linebreaks: true,
+      delimiters: { start: '{{', end: '}}' },  // thêm dòng này
     });
 
     doc.setData({
