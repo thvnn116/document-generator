@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -81,7 +84,8 @@ export default function Home() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
-            {/* Field 1 */}
+
+            {/* Field 1 - Đã sửa label thành string thuần */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Mã phụ lục (Số: {{MS_HDLD}})
@@ -142,7 +146,7 @@ export default function Home() {
               )}
             </div>
 
-            {/* Các field còn lại – copy pattern tương tự */}
+            {/* Field 5 */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Nghề nghiệp
@@ -156,6 +160,7 @@ export default function Home() {
               )}
             </div>
 
+            {/* Field 6 */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Bộ phận
@@ -169,6 +174,7 @@ export default function Home() {
               )}
             </div>
 
+            {/* Field 7 */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Mã số nhân viên
@@ -182,6 +188,7 @@ export default function Home() {
               )}
             </div>
 
+            {/* Field 8 */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Địa chỉ thường trú
@@ -195,6 +202,7 @@ export default function Home() {
               )}
             </div>
 
+            {/* Field 9 */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Số CMND/CCCD
@@ -208,6 +216,7 @@ export default function Home() {
               )}
             </div>
 
+            {/* Field 10 */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Ngày cấp (dd/mm/yyyy)
@@ -222,6 +231,7 @@ export default function Home() {
               )}
             </div>
 
+            {/* Field 11 */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Trình độ học vấn
@@ -235,6 +245,7 @@ export default function Home() {
               )}
             </div>
 
+            {/* Field 12 */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Chuyên ngành
@@ -248,6 +259,7 @@ export default function Home() {
               )}
             </div>
 
+            {/* Field 13 */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Mã hợp đồng gốc
@@ -261,6 +273,7 @@ export default function Home() {
               )}
             </div>
 
+            {/* Field 14 */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Ngày ký hợp đồng gốc (dd/mm/yyyy)
@@ -275,6 +288,7 @@ export default function Home() {
               )}
             </div>
 
+            {/* Field 15 */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Mức lương (VNĐ)
@@ -289,6 +303,7 @@ export default function Home() {
               )}
             </div>
 
+            {/* Field 16 */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Ngày hiệu lực (dd/mm/yyyy)
@@ -302,6 +317,7 @@ export default function Home() {
                 <p className="text-red-500 text-sm mt-1">{errors.NGAY_HL.message}</p>
               )}
             </div>
+
           </div>
 
           <div className="text-center mt-8">
