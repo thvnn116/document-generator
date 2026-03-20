@@ -1,8 +1,15 @@
 export default function Home() {
+
+  const generate = () => {
+    window.open("/api/generate");
+  };
+
   return (
-    <div style={{padding:"40px", fontFamily:"Arial"}}>
-      <h1>Document Generator</h1>
-      <p>Hệ thống tạo văn bản tự động</p>
+    <div style={{padding:"40px",fontFamily:"Arial"}}>
+      <h1>VB Hành Chính</h1>
+      <button onClick={generate}>
+        Tạo hợp đồng mẫu
+      </button>
     </div>
-  )
+  );
 }
