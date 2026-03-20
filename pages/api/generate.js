@@ -48,7 +48,13 @@ export default function handler(req, res) {
     res.send(buf);
 
   } catch (error) {
-    console.log(JSON.stringify(error, null, 2));
-    res.status(500).send(JSON.stringify(error, null, 2));
+  console.error("Docxtemplater error:", error);
+  if (error.properties && error.properties.errors) {
+    console.error("Detailed errors:", JSON.stringify(error.properties.errors, null, 2));
   }
+  res.status(500).json({
+    error: error.message,
+    details: error.properties ? error.properties : "No details"
+  });
+}
 }
