@@ -5,7 +5,7 @@ import Docxtemplater from "docxtemplater";
 
 export default function handler(req, res) {
   try {
-    const templatePath = path.resolve("./templates/phuluc-hopdong-sach.docx");
+    const templatePath = path.resolve("./templates/phuluc-hopdong.docx");
     const content = fs.readFileSync(templatePath, "binary");
 
     const zip = new PizZip(content);
