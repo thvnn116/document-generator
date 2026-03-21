@@ -88,7 +88,7 @@ export default function Home() {
             {/* Field 1 - Đã sửa label thành string thuần */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Mã phụ lục (Số: MS_HDLD)
+                Mã phụ lục
               </label>
               <input
                 {...register('MS_HDLD')}
