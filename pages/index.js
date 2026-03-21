@@ -1,7 +1,6 @@
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -26,8 +25,6 @@ const schema = z.object({
 });
 
 export default function Home() {
-  const [loading, setLoading] = useState(false);
-
   const {
     register,
     handleSubmit,
@@ -55,11 +52,9 @@ export default function Home() {
     },
   });
 
-  const formData = watch();  // Lấy tất cả giá trị realtime
+  const formData = watch();
 
   const onSubmit = async (data) => {
-    setLoading(true);
-
     try {
       const response = await fetch('/api/generate', {
         method: 'POST',
@@ -80,8 +75,6 @@ export default function Home() {
       window.URL.revokeObjectURL(url);
     } catch (err) {
       alert('Có lỗi: ' + err.message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -93,32 +86,29 @@ export default function Home() {
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Bên trái: Form */}
+          {/* Cột trái: Form nhập liệu */}
           <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* 1 */}
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Mã Phụ Lục</label>
                   <input {...register('MS_HDLD')} placeholder="VD: 001/2026" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
                   {errors.MS_HDLD && <p className="mt-1 text-sm text-red-600">{errors.MS_HDLD.message}</p>}
                 </div>
 
-                {/* 2 */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Họ tên người lao động</label>
                   <input {...register('HO_TEN')} placeholder="VD: Nguyễn Văn A" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
                   {errors.HO_TEN && <p className="mt-1 text-sm text-red-600">{errors.HO_TEN.message}</p>}
                 </div>
 
-                {/* 3 */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Ngày sinh</label>
                   <input {...register('NGAY_SINH')} placeholder="VD: 01/01/1998" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
                   {errors.NGAY_SINH && <p className="mt-1 text-sm text-red-600">{errors.NGAY_SINH.message}</p>}
                 </div>
 
-                {/* 4 */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Giới tính</label>
                   <select {...register('GIOI_TINH')} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition">
@@ -129,58 +119,109 @@ export default function Home() {
                   {errors.GIOI_TINH && <p className="mt-1 text-sm text-red-600">{errors.GIOI_TINH.message}</p>}
                 </div>
 
-                {/* Thêm các field còn lại theo pattern tương tự (5 đến 16) */}
-                {/* Để ngắn gọn, mình chỉ liệt kê 4 field đầu. Bạn copy pattern từ field 1-4 và thay tên field + placeholder cho 12 field còn lại */}
-                {/* Field 5: Nghề nghiệp */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Nghề nghiệp</label>
                   <input {...register('NGHE_NGHIEP')} placeholder="VD: Nhân viên kho vận" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
                   {errors.NGHE_NGHIEP && <p className="mt-1 text-sm text-red-600">{errors.NGHE_NGHIEP.message}</p>}
                 </div>
 
-                {/* Field 6: Bộ phận */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Bộ phận</label>
                   <input {...register('BO_PHAN')} placeholder="VD: Kho vận" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
                   {errors.BO_PHAN && <p className="mt-1 text-sm text-red-600">{errors.BO_PHAN.message}</p>}
                 </div>
 
-                {/* ... Tiếp tục copy pattern cho field 7-16 tương tự */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Mã số nhân viên</label>
+                  <input {...register('MS_NV')} placeholder="VD: TSF001" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
+                  {errors.MS_NV && <p className="mt-1 text-sm text-red-600">{errors.MS_NV.message}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Địa chỉ thường trú</label>
+                  <input {...register('DC_THUONG_TRU')} placeholder="VD: Số 123, đường ABC, phường XYZ, TP. Vĩnh Long" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
+                  {errors.DC_THUONG_TRU && <p className="mt-1 text-sm text-red-600">{errors.DC_THUONG_TRU.message}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Số CMND/CCCD</label>
+                  <input {...register('SO_CMND')} placeholder="VD: 123456789" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
+                  {errors.SO_CMND && <p className="mt-1 text-sm text-red-600">{errors.SO_CMND.message}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Ngày cấp</label>
+                  <input {...register('NGAY_CAP')} placeholder="VD: 01/01/2020" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
+                  {errors.NGAY_CAP && <p className="mt-1 text-sm text-red-600">{errors.NGAY_CAP.message}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Trình độ học vấn</label>
+                  <input {...register('HOC_VAN')} placeholder="VD: 12/12" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
+                  {errors.HOC_VAN && <p className="mt-1 text-sm text-red-600">{errors.HOC_VAN.message}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Chuyên ngành</label>
+                  <input {...register('CHUYEN_NGANH')} placeholder="VD: Không hoặc Quản trị kinh doanh" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
+                  {errors.CHUYEN_NGANH && <p className="mt-1 text-sm text-red-600">{errors.CHUYEN_NGANH.message}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Mã hợp đồng gốc</label>
+                  <input {...register('MS_HD')} placeholder="VD: HD001" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
+                  {errors.MS_HD && <p className="mt-1 text-sm text-red-600">{errors.MS_HD.message}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Ngày ký hợp đồng gốc</label>
+                  <input {...register('NGAY_KY_HD')} placeholder="VD: 01/01/2025" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
+                  {errors.NGAY_KY_HD && <p className="mt-1 text-sm text-red-600">{errors.NGAY_KY_HD.message}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Mức lương (VNĐ)</label>
+                  <input {...register('MUC_LUONG')} placeholder="VD: 15.000.000" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
+                  {errors.MUC_LUONG && <p className="mt-1 text-sm text-red-600">{errors.MUC_LUONG.message}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Ngày hiệu lực</label>
+                  <input {...register('NGAY_HL')} placeholder="VD: 01/03/2026" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
+                  {errors.NGAY_HL && <p className="mt-1 text-sm text-red-600">{errors.NGAY_HL.message}</p>}
+                </div>
               </div>
 
               <div className="text-center mt-10">
                 <button
                   type="submit"
-                  disabled={loading}
-                  className={`w-full md:w-auto px-10 py-4 bg-red-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 transition disabled:opacity-60 disabled:cursor-not-allowed ${
-                    loading ? 'animate-pulse' : ''
-                  }`}
+                  className="w-full md:w-auto px-10 py-4 bg-red-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 transition"
                 >
-                  {loading ? 'Đang tạo...' : 'Tạo Phụ Lục Hợp Đồng'}
+                  Tạo Phụ Lục Hợp Đồng
                 </button>
               </div>
             </form>
           </div>
 
-          {/* Bên phải: Realtime Preview */}
+          {/* Cột phải: Realtime Preview */}
           <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Preview Phụ Lục Hợp Đồng</h2>
-            <div className="prose prose-sm md:prose-base max-w-none border border-gray-200 rounded-lg p-6 bg-white min-h-[600px] overflow-auto">
-              <div className="text-center mb-6">
-                <h3 className="text-xl font-bold">CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH</h3>
+            <div className="prose prose-sm md:prose-base max-w-none border border-gray-200 rounded-lg p-6 bg-white min-h-[800px] overflow-auto leading-relaxed">
+              <div className="text-center mb-8">
+                <h3 className="text-xl font-bold uppercase">CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH</h3>
                 <p className="text-sm">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
                 <p className="text-sm">Độc Lập - Tự Do - Hạnh Phúc</p>
-                <p className="font-bold mt-2">Số: {formData.MS_HDLD || '...'}</p>
-                <h2 className="text-xl font-bold mt-4">PHỤ LỤC HỢP ĐỒNG LAO ĐỘNG</h2>
+                <p className="font-bold mt-4">Số: {formData.MS_HDLD || '...'}</p>
+                <h2 className="text-2xl font-bold mt-6">PHỤ LỤC HỢP ĐỒNG LAO ĐỘNG</h2>
               </div>
 
-              <p className="mb-4">
+              <p className="mb-6 leading-7">
                 Chúng tôi, một bên là Ông/Bà: <strong>LÊ DUY HOÀNG</strong> Quốc tịch: Việt Nam<br />
                 Chức vụ: GIÁM ĐỐC<br />
                 Đại diện cho: CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH
               </p>
 
-              <p className="mb-4">
+              <p className="mb-6 leading-7">
                 Và một bên là Ông/Bà: <strong>{formData.HO_TEN || '...'}</strong><br />
                 Quốc tịch: Việt Nam<br />
                 Ngày sinh: {formData.NGAY_SINH || '...'}<br />
@@ -188,33 +229,38 @@ export default function Home() {
                 Nghề nghiệp: {formData.NGHE_NGHIEP || '...'}<br />
                 Bộ phận: {formData.BO_PHAN || '...'} Mã số: {formData.MS_NV || '...'}<br />
                 Địa chỉ thường trú: {formData.DC_THUONG_TRU || '...'}<br />
-                Số CMND: {formData.SO_CMND || '...'} Cấp ngày: {formData.NGAY_CAP || '...'}
+                Số CMND: {formData.SO_CMND || '...'} Cấp ngày: {formData.NGAY_CAP || '...'}<br />
+                Trình độ học vấn: {formData.HOC_VAN || '...'}<br />
+                Chuyên ngành: {formData.CHUYEN_NGANH || '...'}
               </p>
 
-              <p className="mb-4">
-                Căn cứ Hợp đồng lao động số {formData.MS_HD || '...'} ký ngày {formData.NGAY_KY_HD || '...'} và nhu cầu sử dụng lao động, hai bên thỏa thuận thay đổi như sau:
+              <p className="mb-6 leading-7">
+                Căn cứ Hợp đồng lao động số <strong>{formData.MS_HD || '...'}</strong> ký ngày <strong>{formData.NGAY_KY_HD || '...'}</strong> và nhu cầu sử dụng lao động, hai bên cùng nhau thỏa thuận thay đổi một số nội dung của hợp đồng như sau:
               </p>
 
               <p className="font-bold mb-2">Điều 1. Nội dung thay đổi - bổ sung:</p>
-              <p className="mb-4">
-                Mức lương chính theo tháng: {formData.MUC_LUONG || '...'} VNĐ
+              <p className="mb-6 leading-7">
+                Các bên đồng ý thay đổi Hợp đồng lao động số {formData.MS_HD || '...'} như sau:<br />
+                Khoản 1, Điều 3 [Quyền lợi và nghĩa vụ của người lao động]<br />
+                - Mức lương chính theo tháng: <strong>{formData.MUC_LUONG || '...'} VNĐ</strong>
               </p>
 
               <p className="font-bold mb-2">Điều 2. Điều khoản thi hành:</p>
-              <p className="mb-4">
-                Phụ lục này có hiệu lực từ ngày {formData.NGAY_HL || '...'}
+              <p className="mb-6 leading-7">
+                Trừ những nội dung thay đổi nêu tại Điều 1, Phụ lục hợp đồng này, các nội dung khác trong hợp đồng lao động số {formData.MS_HD || '...'} không thay đổi.<br />
+                Phụ lục Hợp đồng lao động này là một phần không tách rời Hợp đồng lao động số {formData.MS_HD || '...'} và được làm thành 02 (hai) bản, các bản có giá trị pháp lý ngang nhau, mỗi bên giữ 01 (một) bản và có hiệu lực từ ngày <strong>{formData.NGAY_HL || '...'}</strong>.
               </p>
 
-              <div className="mt-12 flex justify-between">
-                <div className="text-center">
-                  <p>NGƯỜI LAO ĐỘNG</p>
+              <div className="mt-16 flex justify-between text-center">
+                <div>
+                  <p className="font-bold">NGƯỜI LAO ĐỘNG</p>
                   <p>(Ký tên)</p>
-                  <p className="mt-4 font-bold">{formData.HO_TEN || '...'}</p>
+                  <p className="mt-10 font-bold">{formData.HO_TEN || '...'}</p>
                 </div>
-                <div className="text-center">
-                  <p>NGƯỜI SỬ DỤNG LAO ĐỘNG</p>
+                <div>
+                  <p className="font-bold">NGƯỜI SỬ DỤNG LAO ĐỘNG</p>
                   <p>(Ký tên, đóng dấu)</p>
-                  <p className="mt-4 font-bold">LÊ DUY HOÀNG</p>
+                  <p className="mt-10 font-bold">LÊ DUY HOÀNG</p>
                 </div>
               </div>
             </div>
