@@ -1,10 +1,11 @@
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { renderAsync } from 'docx-preview';
 
 const schema = z.object({
   MS_HDLD: z.string().min(1, 'Vui lòng nhập mã phụ lục'),
@@ -28,6 +29,8 @@ const schema = z.object({
 export default function Home() {
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
+  const [previewBlob, setPreviewBlob] = useState(null);
+  const previewRef = useRef(null);
 
   const {
     register,
@@ -40,6 +43,7 @@ export default function Home() {
   const onSubmit = async (data) => {
     setLoading(true);
     setSuccessMsg('');
+    setPreviewBlob(null);
 
     try {
       const response = await fetch('/api/generate', {
@@ -51,6 +55,18 @@ export default function Home() {
       if (!response.ok) throw new Error('Lỗi khi tạo file');
 
       const blob = await response.blob();
+      setPreviewBlob(blob);  // Lưu blob để preview
+
+      // Render preview
+      if (previewRef.current) {
+        previewRef.current.innerHTML = ''; // Xóa preview cũ
+        await renderAsync(blob, previewRef.current, null, {
+          ignoreWidth: true,
+          ignoreHeight: true,
+        });
+      }
+
+      // Tự động tải về sau khi preview thành công (bạn có thể bỏ nếu chỉ muốn xem trước)
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -60,7 +76,7 @@ export default function Home() {
       a.remove();
       window.URL.revokeObjectURL(url);
 
-      setSuccessMsg('Tạo phụ lục thành công! File đang tải về...');
+      setSuccessMsg('Tạo phụ lục thành công! File đã tải về và hiển thị preview bên dưới.');
     } catch (err) {
       alert('Có lỗi: ' + err.message);
     } finally {
@@ -70,7 +86,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+      <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
         <div className="px-6 py-8 md:px-10 md:py-12">
           <h1 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-10">
             Tạo Phụ Lục Hợp Đồng Lao Động
@@ -84,8 +100,7 @@ export default function Home() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-              {/* 1. Mã Phụ Lục */}
+              {/* Field 1 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Mã Phụ Lục</label>
                 <input
@@ -96,7 +111,7 @@ export default function Home() {
                 {errors.MS_HDLD && <p className="mt-1 text-sm text-red-600">{errors.MS_HDLD.message}</p>}
               </div>
 
-              {/* 2. Họ tên người lao động */}
+              {/* Field 2 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Họ tên người lao động</label>
                 <input
@@ -107,7 +122,7 @@ export default function Home() {
                 {errors.HO_TEN && <p className="mt-1 text-sm text-red-600">{errors.HO_TEN.message}</p>}
               </div>
 
-              {/* 3. Ngày sinh */}
+              {/* Field 3 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Ngày sinh</label>
                 <input
@@ -118,7 +133,7 @@ export default function Home() {
                 {errors.NGAY_SINH && <p className="mt-1 text-sm text-red-600">{errors.NGAY_SINH.message}</p>}
               </div>
 
-              {/* 4. Giới tính */}
+              {/* Field 4 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Giới tính</label>
                 <select
@@ -132,7 +147,7 @@ export default function Home() {
                 {errors.GIOI_TINH && <p className="mt-1 text-sm text-red-600">{errors.GIOI_TINH.message}</p>}
               </div>
 
-              {/* 5. Nghề nghiệp */}
+              {/* Field 5 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Nghề nghiệp</label>
                 <input
@@ -143,7 +158,7 @@ export default function Home() {
                 {errors.NGHE_NGHIEP && <p className="mt-1 text-sm text-red-600">{errors.NGHE_NGHIEP.message}</p>}
               </div>
 
-              {/* 6. Bộ phận */}
+              {/* Field 6 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Bộ phận</label>
                 <input
@@ -154,7 +169,7 @@ export default function Home() {
                 {errors.BO_PHAN && <p className="mt-1 text-sm text-red-600">{errors.BO_PHAN.message}</p>}
               </div>
 
-              {/* 7. Mã số nhân viên */}
+              {/* Field 7 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Mã số nhân viên</label>
                 <input
@@ -165,7 +180,7 @@ export default function Home() {
                 {errors.MS_NV && <p className="mt-1 text-sm text-red-600">{errors.MS_NV.message}</p>}
               </div>
 
-              {/* 8. Địa chỉ thường trú */}
+              {/* Field 8 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Địa chỉ thường trú</label>
                 <input
@@ -176,7 +191,7 @@ export default function Home() {
                 {errors.DC_THUONG_TRU && <p className="mt-1 text-sm text-red-600">{errors.DC_THUONG_TRU.message}</p>}
               </div>
 
-              {/* 9. Số CMND/CCCD */}
+              {/* Field 9 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Số CMND/CCCD</label>
                 <input
@@ -187,7 +202,7 @@ export default function Home() {
                 {errors.SO_CMND && <p className="mt-1 text-sm text-red-600">{errors.SO_CMND.message}</p>}
               </div>
 
-              {/* 10. Ngày cấp */}
+              {/* Field 10 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Ngày cấp</label>
                 <input
@@ -198,7 +213,7 @@ export default function Home() {
                 {errors.NGAY_CAP && <p className="mt-1 text-sm text-red-600">{errors.NGAY_CAP.message}</p>}
               </div>
 
-              {/* 11. Trình độ học vấn */}
+              {/* Field 11 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Trình độ học vấn</label>
                 <input
@@ -209,7 +224,7 @@ export default function Home() {
                 {errors.HOC_VAN && <p className="mt-1 text-sm text-red-600">{errors.HOC_VAN.message}</p>}
               </div>
 
-              {/* 12. Chuyên ngành */}
+              {/* Field 12 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Chuyên ngành</label>
                 <input
@@ -220,7 +235,7 @@ export default function Home() {
                 {errors.CHUYEN_NGANH && <p className="mt-1 text-sm text-red-600">{errors.CHUYEN_NGANH.message}</p>}
               </div>
 
-              {/* 13. Mã hợp đồng gốc */}
+              {/* Field 13 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Mã hợp đồng gốc</label>
                 <input
@@ -231,7 +246,7 @@ export default function Home() {
                 {errors.MS_HD && <p className="mt-1 text-sm text-red-600">{errors.MS_HD.message}</p>}
               </div>
 
-              {/* 14. Ngày ký hợp đồng gốc */}
+              {/* Field 14 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Ngày ký hợp đồng gốc</label>
                 <input
@@ -242,7 +257,7 @@ export default function Home() {
                 {errors.NGAY_KY_HD && <p className="mt-1 text-sm text-red-600">{errors.NGAY_KY_HD.message}</p>}
               </div>
 
-              {/* 15. Mức lương */}
+              {/* Field 15 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Mức lương (VNĐ)</label>
                 <input
@@ -253,7 +268,7 @@ export default function Home() {
                 {errors.MUC_LUONG && <p className="mt-1 text-sm text-red-600">{errors.MUC_LUONG.message}</p>}
               </div>
 
-              {/* 16. Ngày hiệu lực */}
+              {/* Field 16 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Ngày hiệu lực</label>
                 <input
@@ -263,7 +278,6 @@ export default function Home() {
                 />
                 {errors.NGAY_HL && <p className="mt-1 text-sm text-red-600">{errors.NGAY_HL.message}</p>}
               </div>
-
             </div>
 
             <div className="text-center mt-10">
@@ -278,6 +292,17 @@ export default function Home() {
               </button>
             </div>
           </form>
+
+          {/* Phần preview */}
+          {previewBlob && (
+            <div className="mt-12">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Preview Phụ Lục Hợp Đồng</h2>
+              <div
+                ref={previewRef}
+                className="border border-gray-300 rounded-lg p-4 bg-white min-h-[400px] overflow-auto"
+              />
+            </div>
+          )}
 
           <p className="text-center mt-8 text-sm text-gray-500">
             Dữ liệu được bảo mật và chỉ dùng để tạo file hợp đồng. Không lưu trữ.
