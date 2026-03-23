@@ -4,6 +4,7 @@ export const revalidate = 0;
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { useRef } from 'react';
 
 const schema = z.object({
   MS_HDLD: z.string().min(1, 'Vui lòng nhập mã phụ lục'),
@@ -25,6 +26,7 @@ const schema = z.object({
 });
 
 export default function Home() {
+  const iframeRef = useRef(null);
   const {
     register,
     handleSubmit,
@@ -54,17 +56,21 @@ export default function Home() {
 
   const formData = watch();
 
+  const generateFile = async (data) => {
+    const response = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) throw new Error('Lỗi khi tạo file');
+
+    return await response.blob();
+  };
+
   const onSubmit = async (data) => {
     try {
-      const response = await fetch('/api/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) throw new Error('Lỗi khi tạo file');
-
-      const blob = await response.blob();
+      const blob = await generateFile(data);
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -78,8 +84,30 @@ export default function Home() {
     }
   };
 
-  const handlePrint = () => {
-    window.print();
+  const handlePrint = async () => {
+    try {
+      // Lấy dữ liệu hiện tại từ form (watch)
+      const currentData = watch();
+
+      // Generate blob từ API
+      const blob = await generateFile(currentData);
+
+      // Tạo URL tạm
+      const url = window.URL.createObjectURL(blob);
+
+      // Mở trong iframe ẩn để in
+      if (iframeRef.current) {
+        iframeRef.current.src = url;
+        iframeRef.current.onload = () => {
+          setTimeout(() => {
+            iframeRef.current.contentWindow.focus();
+            iframeRef.current.contentWindow.print();
+          }, 1000); // Đợi load file xong
+        };
+      }
+    } catch (err) {
+      alert('Lỗi khi chuẩn bị in: ' + err.message);
+    }
   };
 
   return (
@@ -90,7 +118,7 @@ export default function Home() {
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 print:grid-cols-1 print:gap-0">
-          {/* Form nhập liệu - ẩn khi in */}
+          {/* Form */}
           <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 print:hidden">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -205,7 +233,7 @@ export default function Home() {
 
                 <button
                   type="button"
-                  onClick={() => window.print()}
+                  onClick={handlePrint}
                   className="w-full md:w-auto px-10 py-4 bg-blue-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition"
                 >
                   In Hợp Đồng
@@ -283,9 +311,12 @@ export default function Home() {
         <p className="text-center mt-8 text-sm text-gray-500 print:hidden">
           Dữ liệu được bảo mật và chỉ dùng để tạo file hợp đồng. Không lưu trữ.
         </p>
+
+        {/* Iframe ẩn để in file Word */}
+        <iframe ref={iframeRef} style={{ display: 'none' }} />
       </div>
 
-      {/* CSS cho in ấn đẹp */}
+      {/* CSS in ấn */}
       <style jsx global>{`
         @media print {
           body { background: white !important; }
@@ -293,9 +324,6 @@ export default function Home() {
           .print\\:p-0 { padding: 0 !important; }
           .print\\:shadow-none { box-shadow: none !important; }
           .print\\:rounded-none { border-radius: 0 !important; }
-          .print\\:min-h-0 { min-height: auto !important; }
-          .print\\:overflow-visible { overflow: visible !important; }
-          .print\\:mt-12 { margin-top: 3rem !important; }
         }
       `}</style>
     </div>
