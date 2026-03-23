@@ -83,15 +83,15 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-[210mm] mx-auto bg-white shadow-lg print:shadow-none print:max-w-full print:m-0 print:p-0">
-        <h1 className="text-3xl font-bold text-center text-gray-800 mb-8 print:hidden">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8 print:hidden">
           Tạo Phụ Lục Hợp Đồng Lao Động
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 print:grid-cols-1 print:gap-0">
-          {/* Form - ẩn khi in */}
-          <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg print:hidden">
+          {/* Form */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 print:hidden">
             <form onSubmit={handleSubmit(onCreate)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -214,8 +214,8 @@ export default function Home() {
             </form>
           </div>
 
-          {/* Preview giống chuẩn Word (A4, lề, font) */}
-          <div className="bg-white p-8 print:p-0" style={{ width: '210mm', minHeight: '297mm', margin: '0 auto', background: 'white', boxShadow: '0 0 10px rgba(0,0,0,0.1)', fontFamily: "'Times New Roman', Times, serif", fontSize: '14pt' }}>
+          {/* Preview giống chuẩn Word */}
+          <div className="bg-white p-[2.5cm_2cm_2cm_2cm] print:p-[2.5cm_2cm_2cm_2cm] shadow-lg print:shadow-none" style={{ width: '210mm', minHeight: '297mm', margin: '0 auto', fontFamily: "'Times New Roman', Times, serif", fontSize: '14pt', lineHeight: '1.6', background: 'white' }}>
             <div className="text-center mb-8">
               <h3 className="text-xl font-bold uppercase">CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH</h3>
               <p className="text-sm">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
@@ -224,14 +224,14 @@ export default function Home() {
               <h2 className="text-2xl font-bold mt-6">PHỤ LỤC HỢP ĐỒNG LAO ĐỘNG</h2>
             </div>
 
-            <p className="mb-6 leading-7 text-justify">
+            <p className="mb-6 text-justify">
               Chúng tôi, một bên là Ông/Bà: <strong>LÊ DUY HOÀNG</strong> Quốc tịch: Việt Nam<br />
               Chức vụ: GIÁM ĐỐC<br />
               Đại diện cho: CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH<br />
               Địa chỉ: Số 197, đường 14 tháng 9, khóm 6, phường 5, TP. Vĩnh Long, Tỉnh Vĩnh Long.
             </p>
 
-            <p className="mb-6 leading-7 text-justify">
+            <p className="mb-6 text-justify">
               Và một bên là Ông/Bà: <strong>{formData.HO_TEN || '...'}</strong><br />
               Quốc tịch: Việt Nam<br />
               Ngày sinh: {formData.NGAY_SINH || '...'}<br />
@@ -245,30 +245,30 @@ export default function Home() {
               Chuyên ngành: {formData.CHUYEN_NGANH || '...'}
             </p>
 
-            <p className="mb-6 leading-7 text-justify">
+            <p className="mb-6 text-justify">
               Căn cứ Hợp đồng lao động số <strong>{formData.MS_HD || '...'}</strong> ký ngày <strong>{formData.NGAY_KY_HD || '...'}</strong> và nhu cầu sử dụng lao động, hai bên cùng nhau thỏa thuận thay đổi một số nội dung của hợp đồng đã ký kết như sau:
             </p>
 
             <p className="font-bold mb-2">Điều 1. Nội dung thay đổi - bổ sung:</p>
-            <p className="mb-6 leading-7 text-justify">
+            <p className="mb-6 text-justify">
               Các bên đồng ý thay đổi Hợp đồng lao động số {formData.MS_HD || '...'} như sau:<br />
               Khoản 1, Điều 3 [Quyền lợi và nghĩa vụ của người lao động]<br />
               - Mức lương chính theo tháng: <strong>{formData.MUC_LUONG || '...'} VNĐ</strong>
             </p>
 
             <p className="font-bold mb-2">Điều 2. Điều khoản thi hành:</p>
-            <p className="mb-6 leading-7 text-justify">
+            <p className="mb-6 text-justify">
               Trừ những nội dung thay đổi nêu tại Điều 1, Phụ lục hợp đồng này, các nội dung khác trong hợp đồng lao động số {formData.MS_HD || '...'} không thay đổi.<br />
               Phụ lục Hợp đồng lao động này là một phần không tách rời Hợp đồng lao động số {formData.MS_HD || '...'} và được làm thành 02 (hai) bản, các bản có giá trị pháp lý ngang nhau, mỗi bên giữ 01 (một) bản và có hiệu lực từ ngày <strong>{formData.NGAY_HL || '...'}</strong>.
             </p>
 
             <div className="mt-20 flex justify-between text-center print:mt-16">
-              <div>
+              <div className="w-1/2">
                 <p className="font-bold">NGƯỜI LAO ĐỘNG</p>
                 <p>(Ký tên)</p>
                 <p className="mt-12 font-bold">{formData.HO_TEN || '...'}</p>
               </div>
-              <div>
+              <div className="w-1/2">
                 <p className="font-bold">NGƯỜI SỬ DỤNG LAO ĐỘNG</p>
                 <p>(Ký tên, đóng dấu)</p>
                 <p className="mt-12 font-bold">LÊ DUY HOÀNG</p>
@@ -300,7 +300,7 @@ export default function Home() {
         </p>
       </div>
 
-      {/* CSS chuẩn A4 cho in ấn */}
+      {/* CSS chuẩn A4 cho preview & in */}
       <style jsx global>{`
         @media print {
           @page {
@@ -312,11 +312,14 @@ export default function Home() {
             font-family: 'Times New Roman', Times, serif !important;
             font-size: 14pt !important;
             line-height: 1.6 !important;
+            margin: 0 !important;
+            padding: 0 !important;
           }
           .print\\:hidden { display: none !important; }
           .print\\:p-0 { padding: 0 !important; }
           .print\\:shadow-none { box-shadow: none !important; }
           .print\\:rounded-none { border-radius: 0 !important; }
+          .max-w-7xl { max-width: none !important; margin: 0 !important; }
         }
       `}</style>
     </div>
