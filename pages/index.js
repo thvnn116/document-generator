@@ -61,7 +61,7 @@ export default function Home() {
       body: JSON.stringify(data),
     });
 
-    if (!response.ok) throw new Error('Lỗi tạo file');
+    if (!response.ok) throw new Error('Lỗi khi tạo file');
 
     return await response.blob();
   };
@@ -76,7 +76,7 @@ export default function Home() {
       a.click();
       URL.revokeObjectURL(url);
     } catch (err) {
-      alert('Lỗi tạo file: ' + err.message);
+      alert('Có lỗi khi tạo file: ' + err.message);
     }
   };
 
@@ -87,10 +87,11 @@ export default function Home() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'phuluc-hopdong-print.docx'; // Tên file khác để phân biệt
+      a.download = 'phuluc-hopdong-in.docx'; // Tên khác để dễ nhận biết
       a.click();
       URL.revokeObjectURL(url);
-      alert('File hợp đồng đã được tải về. Hãy mở file và bấm Ctrl+P để in (định dạng chuẩn Word).');
+
+      alert('File hợp đồng đã được tải về. Hãy mở file và bấm Ctrl+P (hoặc Cmd+P) để in – định dạng chuẩn Word, đầy đủ trang A4.');
     } catch (err) {
       alert('Lỗi khi chuẩn bị in: ' + err.message);
     }
@@ -157,147 +158,4 @@ export default function Home() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Địa chỉ thường trú</label>
                   <input {...register('DC_THUONG_TRU')} placeholder="VD: Số 123, đường ABC, phường XYZ, TP. Vĩnh Long" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
-                  {errors.DC_THUONG_TRU && <p className="mt-1 text-sm text-red-600">{errors.DC_THUONG_TRU.message}</p>}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Số CMND/CCCD</label>
-                  <input {...register('SO_CMND')} placeholder="VD: 123456789" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
-                  {errors.SO_CMND && <p className="mt-1 text-sm text-red-600">{errors.SO_CMND.message}</p>}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Ngày cấp</label>
-                  <input {...register('NGAY_CAP')} placeholder="VD: 01/01/2020" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
-                  {errors.NGAY_CAP && <p className="mt-1 text-sm text-red-600">{errors.NGAY_CAP.message}</p>}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Trình độ học vấn</label>
-                  <input {...register('HOC_VAN')} placeholder="VD: 12/12" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
-                  {errors.HOC_VAN && <p className="mt-1 text-sm text-red-600">{errors.HOC_VAN.message}</p>}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Chuyên ngành</label>
-                  <input {...register('CHUYEN_NGANH')} placeholder="VD: Không hoặc Quản trị kinh doanh" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
-                  {errors.CHUYEN_NGANH && <p className="mt-1 text-sm text-red-600">{errors.CHUYEN_NGANH.message}</p>}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Mã hợp đồng gốc</label>
-                  <input {...register('MS_HD')} placeholder="VD: HD001" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
-                  {errors.MS_HD && <p className="mt-1 text-sm text-red-600">{errors.MS_HD.message}</p>}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Ngày ký hợp đồng gốc</label>
-                  <input {...register('NGAY_KY_HD')} placeholder="VD: 01/01/2025" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
-                  {errors.NGAY_KY_HD && <p className="mt-1 text-sm text-red-600">{errors.NGAY_KY_HD.message}</p>}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Mức lương (VNĐ)</label>
-                  <input {...register('MUC_LUONG')} placeholder="VD: 15.000.000" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
-                  {errors.MUC_LUONG && <p className="mt-1 text-sm text-red-600">{errors.MUC_LUONG.message}</p>}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Ngày hiệu lực</label>
-                  <input {...register('NGAY_HL')} placeholder="VD: 01/03/2026" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
-                  {errors.NGAY_HL && <p className="mt-1 text-sm text-red-600">{errors.NGAY_HL.message}</p>}
-                </div>
-              </div>
-
-              <div className="flex flex-col md:flex-row gap-4 justify-center mt-10">
-                <button
-                  type="submit"
-                  className="w-full md:w-auto px-10 py-4 bg-red-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 transition"
-                >
-                  Tạo Phụ Lục Hợp Đồng
-                </button>
-
-                <button
-                  type="button"
-                  onClick={onPrint}
-                  className="w-full md:w-auto px-10 py-4 bg-blue-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition"
-                >
-                  In Hợp Đồng
-                </button>
-              </div>
-            </form>
-          </div>
-
-          {/* Preview realtime */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 print:shadow-none print:p-0 print:rounded-none">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center print:hidden">
-              Preview Phụ Lục Hợp Đồng
-            </h2>
-            <div className="prose prose-sm md:prose-base max-w-none border border-gray-200 rounded-lg p-6 bg-white min-h-[800px] overflow-auto leading-relaxed print:border-none print:p-0 print:min-h-0 print:overflow-visible">
-              <div className="text-center mb-8 print:mb-4">
-                <h3 className="text-xl font-bold uppercase">CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH</h3>
-                <p className="text-sm">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
-                <p className="text-sm">Độc Lập - Tự Do - Hạnh Phúc</p>
-                <p className="font-bold mt-4">Số: {formData.MS_HDLD || '...'}</p>
-                <h2 className="text-2xl font-bold mt-6">PHỤ LỤC HỢP ĐỒNG LAO ĐỘNG</h2>
-              </div>
-
-              <p className="mb-6 leading-7">
-                Chúng tôi, một bên là Ông/Bà: <strong>LÊ DUY HOÀNG</strong> Quốc tịch: Việt Nam<br />
-                Chức vụ: GIÁM ĐỐC<br />
-                Đại diện cho: CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH
-              </p>
-
-              <p className="mb-6 leading-7">
-                Và một bên là Ông/Bà: <strong>{formData.HO_TEN || '...'}</strong><br />
-                Quốc tịch: Việt Nam<br />
-                Ngày sinh: {formData.NGAY_SINH || '...'}<br />
-                Giới tính: {formData.GIOI_TINH || '...'}<br />
-                Nghề nghiệp: {formData.NGHE_NGHIEP || '...'}<br />
-                Bộ phận: {formData.BO_PHAN || '...'} Mã số: {formData.MS_NV || '...'}<br />
-                Địa chỉ thường trú: {formData.DC_THUONG_TRU || '...'}<br />
-                Số CMND: {formData.SO_CMND || '...'} Cấp ngày: {formData.NGAY_CAP || '...'}<br />
-                Trình độ học vấn: {formData.HOC_VAN || '...'}<br />
-                Chuyên ngành: {formData.CHUYEN_NGANH || '...'}
-              </p>
-
-              <p className="mb-6 leading-7">
-                Căn cứ Hợp đồng lao động số <strong>{formData.MS_HD || '...'}</strong> ký ngày <strong>{formData.NGAY_KY_HD || '...'}</strong> và nhu cầu sử dụng lao động, hai bên thỏa thuận thay đổi như sau:
-              </p>
-
-              <p className="font-bold mb-2">Điều 1. Nội dung thay đổi - bổ sung:</p>
-              <p className="mb-6 leading-7">
-                Các bên đồng ý thay đổi Hợp đồng lao động số {formData.MS_HD || '...'} như sau:<br />
-                Khoản 1, Điều 3 [Quyền lợi và nghĩa vụ của người lao động]<br />
-                - Mức lương chính theo tháng: <strong>{formData.MUC_LUONG || '...'} VNĐ</strong>
-              </p>
-
-              <p className="font-bold mb-2">Điều 2. Điều khoản thi hành:</p>
-              <p className="mb-6 leading-7">
-                Trừ những nội dung thay đổi nêu tại Điều 1, Phụ lục hợp đồng này, các nội dung khác trong hợp đồng lao động số {formData.MS_HD || '...'} không thay đổi.<br />
-                Phụ lục Hợp đồng lao động này là một phần không tách rời Hợp đồng lao động số {formData.MS_HD || '...'} và được làm thành 02 (hai) bản, các bản có giá trị pháp lý ngang nhau, mỗi bên giữ 01 (một) bản và có hiệu lực từ ngày <strong>{formData.NGAY_HL || '...'}</strong>.
-              </p>
-
-              <div className="mt-16 flex justify-between text-center print:mt-12">
-                <div>
-                  <p className="font-bold">NGƯỜI LAO ĐỘNG</p>
-                  <p>(Ký tên)</p>
-                  <p className="mt-10 font-bold">{formData.HO_TEN || '...'}</p>
-                </div>
-                <div>
-                  <p className="font-bold">NGƯỜI SỬ DỤNG LAO ĐỘNG</p>
-                  <p>(Ký tên, đóng dấu)</p>
-                  <p className="mt-10 font-bold">LÊ DUY HOÀNG</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <p className="text-center mt-8 text-sm text-gray-500 print:hidden">
-          Dữ liệu được bảo mật và chỉ dùng để tạo file hợp đồng. Không lưu trữ.
-        </p>
-      </div>
-    </div>
-  );
-}
+                  {errors.DC_THUONG_TRU && <p className="mt-1 text-sm text-red-600">{errors.DC
