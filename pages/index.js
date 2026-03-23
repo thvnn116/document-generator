@@ -4,7 +4,6 @@ export const revalidate = 0;
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useRef } from 'react';
 
 const schema = z.object({
   MS_HDLD: z.string().min(1, 'Vui lòng nhập mã phụ lục'),
@@ -26,8 +25,6 @@ const schema = z.object({
 });
 
 export default function Home() {
-  const printIframeRef = useRef(null);
-
   const {
     register,
     handleSubmit,
@@ -91,17 +88,15 @@ export default function Home() {
       const blob = await generateDocxBlob(currentData);
       const url = window.URL.createObjectURL(blob);
 
-      if (printIframeRef.current) {
-        printIframeRef.current.src = url;
-        printIframeRef.current.onload = () => {
-          setTimeout(() => {
-            const iframeWin = printIframeRef.current.contentWindow;
-            if (iframeWin) {
-              iframeWin.focus();
-              iframeWin.print();
-            }
-          }, 1500); // Đợi load file .docx đầy đủ
+      // Mở tab mới với blob URL để in
+      const printWindow = window.open(url, '_blank');
+      if (printWindow) {
+        printWindow.onload = () => {
+          printWindow.focus();
+          printWindow.print();
         };
+      } else {
+        alert('Trình duyệt chặn tab mới. Hãy cho phép pop-up cho website này.');
       }
     } catch (err) {
       alert('Lỗi khi chuẩn bị in: ' + err.message);
@@ -309,9 +304,6 @@ export default function Home() {
         <p className="text-center mt-8 text-sm text-gray-500 print:hidden">
           Dữ liệu được bảo mật và chỉ dùng để tạo file hợp đồng. Không lưu trữ.
         </p>
-
-        {/* Iframe ẩn để in */}
-        <iframe ref={printIframeRef} style={{ display: 'none', width: '100%', height: '100vh' }} />
       </div>
     </div>
   );
