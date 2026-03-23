@@ -84,7 +84,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-screen-xl mx-auto">
         <h1 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8 print:hidden">
           Tạo Phụ Lục Hợp Đồng Lao Động
         </h1>
@@ -214,8 +214,8 @@ export default function Home() {
             </form>
           </div>
 
-          {/* Preview giống chuẩn Word - dàn trải full A4 khi in */}
-          <div className="bg-white p-10 md:p-12 print:p-[2.5cm_2cm_2cm_2cm] shadow-xl print:shadow-none mx-auto" style={{ maxWidth: '210mm', minHeight: '297mm', fontFamily: "'Times New Roman', Times, serif", fontSize: '14pt', lineHeight: '1.6', background: 'white' }}>
+          {/* Preview dàn trải full A4 khi in */}
+          <div className="bg-white p-10 md:p-12 print:p-[2.5cm_2cm_2cm_2cm] shadow-xl print:shadow-none mx-auto print:mx-0" style={{ minWidth: '210mm', maxWidth: '100%', minHeight: '297mm', fontFamily: "'Times New Roman', Times, serif", fontSize: '14pt', lineHeight: '1.6', background: 'white' }}>
             <div className="text-center mb-8">
               <h3 className="text-xl font-bold uppercase">CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH</h3>
               <p className="text-sm">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
@@ -224,14 +224,14 @@ export default function Home() {
               <h2 className="text-2xl font-bold mt-6">PHỤ LỤC HỢP ĐỒNG LAO ĐỘNG</h2>
             </div>
 
-            <p className="mb-6 text-justify">
+            <p className="mb-6 text-justify hyphens-auto">
               Chúng tôi, một bên là Ông/Bà: <strong>LÊ DUY HOÀNG</strong> Quốc tịch: Việt Nam<br />
               Chức vụ: GIÁM ĐỐC<br />
               Đại diện cho: CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH<br />
               Địa chỉ: Số 197, đường 14 tháng 9, khóm 6, phường 5, TP. Vĩnh Long, Tỉnh Vĩnh Long.
             </p>
 
-            <p className="mb-6 text-justify">
+            <p className="mb-6 text-justify hyphens-auto">
               Và một bên là Ông/Bà: <strong>{formData.HO_TEN || '...'}</strong><br />
               Quốc tịch: Việt Nam<br />
               Ngày sinh: {formData.NGAY_SINH || '...'}<br />
@@ -245,19 +245,19 @@ export default function Home() {
               Chuyên ngành: {formData.CHUYEN_NGANH || '...'}
             </p>
 
-            <p className="mb-6 text-justify">
+            <p className="mb-6 text-justify hyphens-auto">
               Căn cứ Hợp đồng lao động số <strong>{formData.MS_HD || '...'}</strong> ký ngày <strong>{formData.NGAY_KY_HD || '...'}</strong> và nhu cầu sử dụng lao động, hai bên cùng nhau thỏa thuận thay đổi một số nội dung của hợp đồng đã ký kết như sau:
             </p>
 
             <p className="font-bold mb-2">Điều 1. Nội dung thay đổi - bổ sung:</p>
-            <p className="mb-6 text-justify">
+            <p className="mb-6 text-justify hyphens-auto">
               Các bên đồng ý thay đổi Hợp đồng lao động số {formData.MS_HD || '...'} như sau:<br />
               Khoản 1, Điều 3 [Quyền lợi và nghĩa vụ của người lao động]<br />
               - Mức lương chính theo tháng: <strong>{formData.MUC_LUONG || '...'} VNĐ</strong>
             </p>
 
             <p className="font-bold mb-2">Điều 2. Điều khoản thi hành:</p>
-            <p className="mb-6 text-justify">
+            <p className="mb-6 text-justify hyphens-auto">
               Trừ những nội dung thay đổi nêu tại Điều 1, Phụ lục hợp đồng này, các nội dung khác trong hợp đồng lao động số {formData.MS_HD || '...'} không thay đổi.<br />
               Phụ lục Hợp đồng lao động này là một phần không tách rời Hợp đồng lao động số {formData.MS_HD || '...'} và được làm thành 02 (hai) bản, các bản có giá trị pháp lý ngang nhau, mỗi bên giữ 01 (một) bản và có hiệu lực từ ngày <strong>{formData.NGAY_HL || '...'}</strong>.
             </p>
@@ -300,7 +300,7 @@ export default function Home() {
         </p>
       </div>
 
-      {/* CSS tối ưu cho in full trang A4 */}
+      {/* CSS tối ưu dàn trải full A4 */}
       <style jsx global>{`
         @media print {
           @page {
@@ -316,11 +316,11 @@ export default function Home() {
             padding: 0 !important;
           }
           .print\\:hidden { display: none !important; }
-          .max-w-7xl { max-width: none !important; margin: 0 !important; padding: 0 !important; }
-          .shadow-lg, .rounded-2xl, .p-8, .p-6 { box-shadow: none !important; border-radius: 0 !important; padding: 0 !important; }
+          .max-w-5xl { max-width: none !important; margin: 0 !important; padding: 0 !important; }
+          .shadow-xl, .rounded-2xl, .p-10, .p-12 { box-shadow: none !important; border-radius: 0 !important; padding: 0 !important; }
           .grid-cols-2 { grid-template-columns: 1fr !important; gap: 0 !important; }
           .bg-white { background: white !important; }
-          .text-justify { text-align: justify !important; }
+          .text-justify { text-align: justify !important; hyphens: auto !important; word-break: break-word !important; }
         }
       `}</style>
     </div>
