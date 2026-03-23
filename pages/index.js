@@ -84,7 +84,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         <h1 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8 print:hidden">
           Tạo Phụ Lục Hợp Đồng Lao Động
         </h1>
@@ -214,8 +214,8 @@ export default function Home() {
             </form>
           </div>
 
-          {/* Preview giống chuẩn Word */}
-          <div className="bg-white p-[2.5cm_2cm_2cm_2cm] print:p-[2.5cm_2cm_2cm_2cm] shadow-lg print:shadow-none" style={{ width: '210mm', minHeight: '297mm', margin: '0 auto', fontFamily: "'Times New Roman', Times, serif", fontSize: '14pt', lineHeight: '1.6', background: 'white' }}>
+          {/* Preview giống chuẩn Word - dàn trải full A4 khi in */}
+          <div className="bg-white p-10 md:p-12 print:p-[2.5cm_2cm_2cm_2cm] shadow-xl print:shadow-none mx-auto" style={{ maxWidth: '210mm', minHeight: '297mm', fontFamily: "'Times New Roman', Times, serif", fontSize: '14pt', lineHeight: '1.6', background: 'white' }}>
             <div className="text-center mb-8">
               <h3 className="text-xl font-bold uppercase">CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH</h3>
               <p className="text-sm">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
@@ -262,26 +262,26 @@ export default function Home() {
               Phụ lục Hợp đồng lao động này là một phần không tách rời Hợp đồng lao động số {formData.MS_HD || '...'} và được làm thành 02 (hai) bản, các bản có giá trị pháp lý ngang nhau, mỗi bên giữ 01 (một) bản và có hiệu lực từ ngày <strong>{formData.NGAY_HL || '...'}</strong>.
             </p>
 
-            <div className="mt-20 flex justify-between text-center print:mt-16">
+            <div className="mt-24 flex justify-between text-center print:mt-20">
               <div className="w-1/2">
                 <p className="font-bold">NGƯỜI LAO ĐỘNG</p>
                 <p>(Ký tên)</p>
-                <p className="mt-12 font-bold">{formData.HO_TEN || '...'}</p>
+                <p className="mt-16 font-bold">{formData.HO_TEN || '...'}</p>
               </div>
               <div className="w-1/2">
                 <p className="font-bold">NGƯỜI SỬ DỤNG LAO ĐỘNG</p>
                 <p>(Ký tên, đóng dấu)</p>
-                <p className="mt-12 font-bold">LÊ DUY HOÀNG</p>
+                <p className="mt-16 font-bold">LÊ DUY HOÀNG</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="flex justify-center gap-6 mt-10 print:hidden">
+        <div className="flex justify-center gap-6 mt-12 print:hidden">
           <button
             type="submit"
             onClick={handleSubmit(onCreate)}
-            className="px-10 py-4 bg-red-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 transition"
+            className="px-12 py-4 bg-red-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 transition"
           >
             Tạo Phụ Lục Hợp Đồng
           </button>
@@ -289,7 +289,7 @@ export default function Home() {
           <button
             type="button"
             onClick={onPrint}
-            className="px-10 py-4 bg-blue-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition"
+            className="px-12 py-4 bg-blue-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition"
           >
             In Hợp Đồng
           </button>
@@ -300,7 +300,7 @@ export default function Home() {
         </p>
       </div>
 
-      {/* CSS chuẩn A4 cho preview & in */}
+      {/* CSS tối ưu cho in full trang A4 */}
       <style jsx global>{`
         @media print {
           @page {
@@ -316,10 +316,11 @@ export default function Home() {
             padding: 0 !important;
           }
           .print\\:hidden { display: none !important; }
-          .print\\:p-0 { padding: 0 !important; }
-          .print\\:shadow-none { box-shadow: none !important; }
-          .print\\:rounded-none { border-radius: 0 !important; }
-          .max-w-7xl { max-width: none !important; margin: 0 !important; }
+          .max-w-7xl { max-width: none !important; margin: 0 !important; padding: 0 !important; }
+          .shadow-lg, .rounded-2xl, .p-8, .p-6 { box-shadow: none !important; border-radius: 0 !important; padding: 0 !important; }
+          .grid-cols-2 { grid-template-columns: 1fr !important; gap: 0 !important; }
+          .bg-white { background: white !important; }
+          .text-justify { text-align: justify !important; }
         }
       `}</style>
     </div>
