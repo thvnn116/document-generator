@@ -45,21 +45,21 @@ export default function Home() {
 
   const formData = watch();
 
-  // Tạo file .docx (dùng chung cho cả Tạo và In)
-  const generateDocx = async (data) => {
+  const generateDocxBlob = async (data) => {
     const response = await fetch('/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-    if (!response.ok) throw new Error('Lỗi tạo file');
+
+    if (!response.ok) throw new Error('Lỗi khi tạo file');
+
     return await response.blob();
   };
 
-  // Nút Tạo → tải file về
-  const onSubmit = async (data) => {
+  const onCreate = async (data) => {
     try {
-      const blob = await generateDocx(data);
+      const blob = await generateDocxBlob(data);
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -69,24 +69,26 @@ export default function Home() {
       a.remove();
       window.URL.revokeObjectURL(url);
     } catch (err) {
-      alert('Có lỗi: ' + err.message);
+      alert('Có lỗi khi tạo file: ' + err.message);
     }
   };
 
-  // Nút In → mở hộp thoại in trực tiếp (không tải về)
-  const handlePrint = async () => {
+  const onPrint = async () => {
     try {
-      const currentData = watch();
-      const blob = await generateDocx(currentData);
+      const currentData = watch(); // Lấy dữ liệu hiện tại từ form
+      const blob = await generateDocxBlob(currentData);
       const url = window.URL.createObjectURL(blob);
 
       if (printIframeRef.current) {
         printIframeRef.current.src = url;
+
+        // Đợi iframe load xong rồi in
         printIframeRef.current.onload = () => {
           setTimeout(() => {
-            printIframeRef.current.contentWindow.focus();
-            printIframeRef.current.contentWindow.print();
-          }, 800);
+            const iframeWin = printIframeRef.current.contentWindow;
+            iframeWin.focus();
+            iframeWin.print();
+          }, 1500); // Tăng thời gian chờ để file .docx load đầy đủ định dạng
         };
       }
     } catch (err) {
@@ -102,9 +104,9 @@ export default function Home() {
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 print:grid-cols-1 print:gap-0">
-          {/* Form */}
+          {/* Form nhập liệu - ẩn khi in */}
           <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 print:hidden">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={handleSubmit(onCreate)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Mã Phụ Lục</label>
@@ -232,7 +234,6 @@ export default function Home() {
               Preview Phụ Lục Hợp Đồng
             </h2>
             <div className="prose prose-sm md:prose-base max-w-none border border-gray-200 rounded-lg p-6 bg-white min-h-[800px] overflow-auto leading-relaxed print:border-none print:p-0 print:min-h-0 print:overflow-visible">
-              {/* Nội dung preview giống hệt trước */}
               <div className="text-center mb-8 print:mb-4">
                 <h3 className="text-xl font-bold uppercase">CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH</h3>
                 <p className="text-sm">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
@@ -297,7 +298,7 @@ export default function Home() {
           Dữ liệu được bảo mật và chỉ dùng để tạo file hợp đồng. Không lưu trữ.
         </p>
 
-        {/* Iframe ẩn dùng để in */}
+        {/* Iframe ẩn dùng để in file .docx trực tiếp */}
         <iframe ref={printIframeRef} style={{ display: 'none' }} />
       </div>
     </div>
