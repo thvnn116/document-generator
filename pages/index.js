@@ -85,13 +85,12 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
       <div className="max-w-[210mm] mx-auto bg-white shadow-lg print:shadow-none print:max-w-full print:m-0 print:p-0">
-        {/* Header trang web (ẩn khi in) */}
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-8 print:hidden">
           Tạo Phụ Lục Hợp Đồng Lao Động
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 print:grid-cols-1 print:gap-0">
-          {/* Form nhập liệu - ẩn khi in */}
+          {/* Form - ẩn khi in */}
           <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg print:hidden">
             <form onSubmit={handleSubmit(onCreate)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -215,8 +214,8 @@ export default function Home() {
             </form>
           </div>
 
-          {/* Preview giống Word */}
-          <div className="bg-white p-8 print:p-0" style={{ width: '210mm', minHeight: '297mm', margin: '0 auto', background: 'white', boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
+          {/* Preview giống chuẩn Word (A4, lề, font) */}
+          <div className="bg-white p-8 print:p-0" style={{ width: '210mm', minHeight: '297mm', margin: '0 auto', background: 'white', boxShadow: '0 0 10px rgba(0,0,0,0.1)', fontFamily: "'Times New Roman', Times, serif", fontSize: '14pt' }}>
             <div className="text-center mb-8">
               <h3 className="text-xl font-bold uppercase">CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH</h3>
               <p className="text-sm">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
@@ -242,4 +241,84 @@ export default function Home() {
               Bộ phận: {formData.BO_PHAN || '...'} Mã số: {formData.MS_NV || '...'}<br />
               Địa chỉ thường trú: {formData.DC_THUONG_TRU || '...'}<br />
               Số CMND/CCCD: {formData.SO_CMND || '...'} Cấp ngày: {formData.NGAY_CAP || '...'}<br />
-              Trình độ học vấn: {formData.HOC_VAN || '...
+              Trình độ học vấn: {formData.HOC_VAN || '...'}<br />
+              Chuyên ngành: {formData.CHUYEN_NGANH || '...'}
+            </p>
+
+            <p className="mb-6 leading-7 text-justify">
+              Căn cứ Hợp đồng lao động số <strong>{formData.MS_HD || '...'}</strong> ký ngày <strong>{formData.NGAY_KY_HD || '...'}</strong> và nhu cầu sử dụng lao động, hai bên cùng nhau thỏa thuận thay đổi một số nội dung của hợp đồng đã ký kết như sau:
+            </p>
+
+            <p className="font-bold mb-2">Điều 1. Nội dung thay đổi - bổ sung:</p>
+            <p className="mb-6 leading-7 text-justify">
+              Các bên đồng ý thay đổi Hợp đồng lao động số {formData.MS_HD || '...'} như sau:<br />
+              Khoản 1, Điều 3 [Quyền lợi và nghĩa vụ của người lao động]<br />
+              - Mức lương chính theo tháng: <strong>{formData.MUC_LUONG || '...'} VNĐ</strong>
+            </p>
+
+            <p className="font-bold mb-2">Điều 2. Điều khoản thi hành:</p>
+            <p className="mb-6 leading-7 text-justify">
+              Trừ những nội dung thay đổi nêu tại Điều 1, Phụ lục hợp đồng này, các nội dung khác trong hợp đồng lao động số {formData.MS_HD || '...'} không thay đổi.<br />
+              Phụ lục Hợp đồng lao động này là một phần không tách rời Hợp đồng lao động số {formData.MS_HD || '...'} và được làm thành 02 (hai) bản, các bản có giá trị pháp lý ngang nhau, mỗi bên giữ 01 (một) bản và có hiệu lực từ ngày <strong>{formData.NGAY_HL || '...'}</strong>.
+            </p>
+
+            <div className="mt-20 flex justify-between text-center print:mt-16">
+              <div>
+                <p className="font-bold">NGƯỜI LAO ĐỘNG</p>
+                <p>(Ký tên)</p>
+                <p className="mt-12 font-bold">{formData.HO_TEN || '...'}</p>
+              </div>
+              <div>
+                <p className="font-bold">NGƯỜI SỬ DỤNG LAO ĐỘNG</p>
+                <p>(Ký tên, đóng dấu)</p>
+                <p className="mt-12 font-bold">LÊ DUY HOÀNG</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-center gap-6 mt-10 print:hidden">
+          <button
+            type="submit"
+            onClick={handleSubmit(onCreate)}
+            className="px-10 py-4 bg-red-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 transition"
+          >
+            Tạo Phụ Lục Hợp Đồng
+          </button>
+
+          <button
+            type="button"
+            onClick={onPrint}
+            className="px-10 py-4 bg-blue-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition"
+          >
+            In Hợp Đồng
+          </button>
+        </div>
+
+        <p className="text-center mt-8 text-sm text-gray-500 print:hidden">
+          Dữ liệu được bảo mật và chỉ dùng để tạo file hợp đồng. Không lưu trữ.
+        </p>
+      </div>
+
+      {/* CSS chuẩn A4 cho in ấn */}
+      <style jsx global>{`
+        @media print {
+          @page {
+            size: A4;
+            margin: 2.5cm 2cm 2cm 2cm;
+          }
+          body {
+            background: white !important;
+            font-family: 'Times New Roman', Times, serif !important;
+            font-size: 14pt !important;
+            line-height: 1.6 !important;
+          }
+          .print\\:hidden { display: none !important; }
+          .print\\:p-0 { padding: 0 !important; }
+          .print\\:shadow-none { box-shadow: none !important; }
+          .print\\:rounded-none { border-radius: 0 !important; }
+        }
+      `}</style>
+    </div>
+  );
+}
