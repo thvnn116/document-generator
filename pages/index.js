@@ -36,10 +36,22 @@ export default function Home() {
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      MS_HDLD: '', HO_TEN: '', NGAY_SINH: '', GIOI_TINH: '',
-      NGHE_NGHIEP: '', BO_PHAN: '', MS_NV: '', DC_THUONG_TRU: '',
-      SO_CMND: '', NGAY_CAP: '', HOC_VAN: '', CHUYEN_NGANH: '',
-      MS_HD: '', NGAY_KY_HD: '', MUC_LUONG: '', NGAY_HL: '',
+      MS_HDLD: '',
+      HO_TEN: '',
+      NGAY_SINH: '',
+      GIOI_TINH: '',
+      NGHE_NGHIEP: '',
+      BO_PHAN: '',
+      MS_NV: '',
+      DC_THUONG_TRU: '',
+      SO_CMND: '',
+      NGAY_CAP: '',
+      HOC_VAN: '',
+      CHUYEN_NGANH: '',
+      MS_HD: '',
+      NGAY_KY_HD: '',
+      MUC_LUONG: '',
+      NGAY_HL: '',
     },
   });
 
@@ -75,20 +87,20 @@ export default function Home() {
 
   const onPrint = async () => {
     try {
-      const currentData = watch(); // Lấy dữ liệu hiện tại từ form
+      const currentData = watch();
       const blob = await generateDocxBlob(currentData);
       const url = window.URL.createObjectURL(blob);
 
       if (printIframeRef.current) {
         printIframeRef.current.src = url;
-
-        // Đợi iframe load xong rồi in
         printIframeRef.current.onload = () => {
           setTimeout(() => {
             const iframeWin = printIframeRef.current.contentWindow;
-            iframeWin.focus();
-            iframeWin.print();
-          }, 1500); // Tăng thời gian chờ để file .docx load đầy đủ định dạng
+            if (iframeWin) {
+              iframeWin.focus();
+              iframeWin.print();
+            }
+          }, 1500); // Đợi load file .docx đầy đủ
         };
       }
     } catch (err) {
@@ -104,7 +116,7 @@ export default function Home() {
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 print:grid-cols-1 print:gap-0">
-          {/* Form nhập liệu - ẩn khi in */}
+          {/* Form */}
           <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 print:hidden">
             <form onSubmit={handleSubmit(onCreate)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -219,7 +231,7 @@ export default function Home() {
 
                 <button
                   type="button"
-                  onClick={handlePrint}
+                  onClick={onPrint}
                   className="w-full md:w-auto px-10 py-4 bg-blue-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition"
                 >
                   In Hợp Đồng
@@ -298,8 +310,8 @@ export default function Home() {
           Dữ liệu được bảo mật và chỉ dùng để tạo file hợp đồng. Không lưu trữ.
         </p>
 
-        {/* Iframe ẩn dùng để in file .docx trực tiếp */}
-        <iframe ref={printIframeRef} style={{ display: 'none' }} />
+        {/* Iframe ẩn để in */}
+        <iframe ref={printIframeRef} style={{ display: 'none', width: '100%', height: '100vh' }} />
       </div>
     </div>
   );
