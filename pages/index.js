@@ -26,7 +26,8 @@ const schema = z.object({
 });
 
 export default function Home() {
-  const iframeRef = useRef(null);
+  const printIframeRef = useRef(null);
+
   const {
     register,
     handleSubmit,
@@ -35,42 +36,30 @@ export default function Home() {
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      MS_HDLD: '',
-      HO_TEN: '',
-      NGAY_SINH: '',
-      GIOI_TINH: '',
-      NGHE_NGHIEP: '',
-      BO_PHAN: '',
-      MS_NV: '',
-      DC_THUONG_TRU: '',
-      SO_CMND: '',
-      NGAY_CAP: '',
-      HOC_VAN: '',
-      CHUYEN_NGANH: '',
-      MS_HD: '',
-      NGAY_KY_HD: '',
-      MUC_LUONG: '',
-      NGAY_HL: '',
+      MS_HDLD: '', HO_TEN: '', NGAY_SINH: '', GIOI_TINH: '',
+      NGHE_NGHIEP: '', BO_PHAN: '', MS_NV: '', DC_THUONG_TRU: '',
+      SO_CMND: '', NGAY_CAP: '', HOC_VAN: '', CHUYEN_NGANH: '',
+      MS_HD: '', NGAY_KY_HD: '', MUC_LUONG: '', NGAY_HL: '',
     },
   });
 
   const formData = watch();
 
-  const generateFile = async (data) => {
+  // Tạo file .docx (dùng chung cho cả Tạo và In)
+  const generateDocx = async (data) => {
     const response = await fetch('/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-
-    if (!response.ok) throw new Error('Lỗi khi tạo file');
-
+    if (!response.ok) throw new Error('Lỗi tạo file');
     return await response.blob();
   };
 
+  // Nút Tạo → tải file về
   const onSubmit = async (data) => {
     try {
-      const blob = await generateFile(data);
+      const blob = await generateDocx(data);
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -84,25 +73,20 @@ export default function Home() {
     }
   };
 
+  // Nút In → mở hộp thoại in trực tiếp (không tải về)
   const handlePrint = async () => {
     try {
-      // Lấy dữ liệu hiện tại từ form (watch)
       const currentData = watch();
-
-      // Generate blob từ API
-      const blob = await generateFile(currentData);
-
-      // Tạo URL tạm
+      const blob = await generateDocx(currentData);
       const url = window.URL.createObjectURL(blob);
 
-      // Mở trong iframe ẩn để in
-      if (iframeRef.current) {
-        iframeRef.current.src = url;
-        iframeRef.current.onload = () => {
+      if (printIframeRef.current) {
+        printIframeRef.current.src = url;
+        printIframeRef.current.onload = () => {
           setTimeout(() => {
-            iframeRef.current.contentWindow.focus();
-            iframeRef.current.contentWindow.print();
-          }, 1000); // Đợi load file xong
+            printIframeRef.current.contentWindow.focus();
+            printIframeRef.current.contentWindow.print();
+          }, 800);
         };
       }
     } catch (err) {
@@ -248,6 +232,7 @@ export default function Home() {
               Preview Phụ Lục Hợp Đồng
             </h2>
             <div className="prose prose-sm md:prose-base max-w-none border border-gray-200 rounded-lg p-6 bg-white min-h-[800px] overflow-auto leading-relaxed print:border-none print:p-0 print:min-h-0 print:overflow-visible">
+              {/* Nội dung preview giống hệt trước */}
               <div className="text-center mb-8 print:mb-4">
                 <h3 className="text-xl font-bold uppercase">CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH</h3>
                 <p className="text-sm">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
@@ -312,20 +297,9 @@ export default function Home() {
           Dữ liệu được bảo mật và chỉ dùng để tạo file hợp đồng. Không lưu trữ.
         </p>
 
-        {/* Iframe ẩn để in file Word */}
-        <iframe ref={iframeRef} style={{ display: 'none' }} />
+        {/* Iframe ẩn dùng để in */}
+        <iframe ref={printIframeRef} style={{ display: 'none' }} />
       </div>
-
-      {/* CSS in ấn */}
-      <style jsx global>{`
-        @media print {
-          body { background: white !important; }
-          .print\\:hidden { display: none !important; }
-          .print\\:p-0 { padding: 0 !important; }
-          .print\\:shadow-none { box-shadow: none !important; }
-          .print\\:rounded-none { border-radius: 0 !important; }
-        }
-      `}</style>
     </div>
   );
 }
