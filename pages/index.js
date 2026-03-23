@@ -4,7 +4,6 @@ export const revalidate = 0;
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useRef } from 'react';
 
 const schema = z.object({
   MS_HDLD: z.string().min(1, 'Vui lòng nhập mã phụ lục'),
@@ -26,8 +25,6 @@ const schema = z.object({
 });
 
 export default function Home() {
-  const printIframeRef = useRef(null);
-
   const {
     register,
     handleSubmit,
@@ -88,28 +85,14 @@ export default function Home() {
       const currentData = watch();
       const blob = await generateDocxBlob(currentData);
       const url = URL.createObjectURL(blob);
-
-      const iframe = printIframeRef.current;
-      if (iframe) {
-        iframe.src = url;
-        iframe.onload = () => {
-          setTimeout(() => {
-            const win = iframe.contentWindow || iframe.contentDocument.defaultView;
-            if (win) {
-              win.focus();
-              win.print();
-            } else {
-              alert('Không thể in. Hãy thử lại hoặc dùng nút Tạo để tải file.');
-            }
-            // Cleanup sau khi in
-            setTimeout(() => URL.revokeObjectURL(url), 10000);
-          }, 2000); // Tăng timeout để .docx load đầy đủ
-        };
-      } else {
-        alert('Iframe không sẵn sàng. Hãy thử lại.');
-      }
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'phuluc-hopdong-print.docx'; // Tên file khác để phân biệt
+      a.click();
+      URL.revokeObjectURL(url);
+      alert('File hợp đồng đã được tải về. Hãy mở file và bấm Ctrl+P để in (định dạng chuẩn Word).');
     } catch (err) {
-      alert('Lỗi chuẩn bị in: ' + err.message);
+      alert('Lỗi khi chuẩn bị in: ' + err.message);
     }
   };
 
@@ -314,9 +297,6 @@ export default function Home() {
         <p className="text-center mt-8 text-sm text-gray-500 print:hidden">
           Dữ liệu được bảo mật và chỉ dùng để tạo file hợp đồng. Không lưu trữ.
         </p>
-
-        {/* Iframe ẩn để in */}
-        <iframe ref={printIframeRef} style={{ display: 'none', width: '210mm', height: '297mm' }} />
       </div>
     </div>
   );
