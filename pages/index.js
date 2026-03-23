@@ -215,7 +215,7 @@ export default function Home() {
           </div>
 
           {/* Preview dàn trải rộng hơn */}
-          <div className="bg-white p-10 md:p-12 print:p-[1.5cm_1.5cm_1.5cm_1.5cm] shadow-xl print:shadow-none mx-auto print:mx-0" style={{ minWidth: '210mm', maxWidth: '100%', minHeight: '297mm', fontFamily: "'Times New Roman', Times, serif", fontSize: '13.5pt', lineHeight: '1.55', background: 'white' }}>
+          <div className="bg-white p-10 md:p-12 print:p-[1.2cm_1.5cm_1.5cm_1.5cm] shadow-xl print:shadow-none mx-auto print:mx-0" style={{ minWidth: '210mm', maxWidth: '100%', minHeight: '297mm', fontFamily: "'Times New Roman', Times, serif", fontSize: '13.5pt', lineHeight: '1.55', background: 'white' }}>
             <div className="text-center mb-6">
               <h3 className="text-xl font-bold uppercase">CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH</h3>
               <p className="text-sm">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
