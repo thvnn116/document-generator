@@ -78,19 +78,22 @@ export default function Home() {
     }
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8 print:bg-white print:p-0">
+      <div className="max-w-7xl mx-auto print:max-w-full print:m-0">
+        <h1 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8 print:hidden">
           Tạo Phụ Lục Hợp Đồng Lao Động
         </h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Cột trái: Form nhập liệu */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 print:grid-cols-1 print:gap-0">
+          {/* Form nhập liệu - ẩn khi in */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 print:hidden">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Mã Phụ Lục</label>
                   <input {...register('MS_HDLD')} placeholder="VD: 001/2026" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition" />
@@ -192,22 +195,32 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="text-center mt-10">
+              <div className="flex flex-col md:flex-row gap-4 justify-center mt-10">
                 <button
                   type="submit"
                   className="w-full md:w-auto px-10 py-4 bg-red-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 transition"
                 >
                   Tạo Phụ Lục Hợp Đồng
                 </button>
+
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  className="w-full md:w-auto px-10 py-4 bg-blue-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition"
+                >
+                  In Hợp Đồng
+                </button>
               </div>
             </form>
           </div>
 
-          {/* Cột phải: Realtime Preview */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Preview Phụ Lục Hợp Đồng</h2>
-            <div className="prose prose-sm md:prose-base max-w-none border border-gray-200 rounded-lg p-6 bg-white min-h-[800px] overflow-auto leading-relaxed">
-              <div className="text-center mb-8">
+          {/* Preview realtime */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 print:shadow-none print:p-0 print:rounded-none">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center print:hidden">
+              Preview Phụ Lục Hợp Đồng
+            </h2>
+            <div className="prose prose-sm md:prose-base max-w-none border border-gray-200 rounded-lg p-6 bg-white min-h-[800px] overflow-auto leading-relaxed print:border-none print:p-0 print:min-h-0 print:overflow-visible">
+              <div className="text-center mb-8 print:mb-4">
                 <h3 className="text-xl font-bold uppercase">CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH</h3>
                 <p className="text-sm">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
                 <p className="text-sm">Độc Lập - Tự Do - Hạnh Phúc</p>
@@ -235,7 +248,7 @@ export default function Home() {
               </p>
 
               <p className="mb-6 leading-7">
-                Căn cứ Hợp đồng lao động số <strong>{formData.MS_HD || '...'}</strong> ký ngày <strong>{formData.NGAY_KY_HD || '...'}</strong> và nhu cầu sử dụng lao động, hai bên cùng nhau thỏa thuận thay đổi một số nội dung của hợp đồng như sau:
+                Căn cứ Hợp đồng lao động số <strong>{formData.MS_HD || '...'}</strong> ký ngày <strong>{formData.NGAY_KY_HD || '...'}</strong> và nhu cầu sử dụng lao động, hai bên thỏa thuận thay đổi như sau:
               </p>
 
               <p className="font-bold mb-2">Điều 1. Nội dung thay đổi - bổ sung:</p>
@@ -251,7 +264,7 @@ export default function Home() {
                 Phụ lục Hợp đồng lao động này là một phần không tách rời Hợp đồng lao động số {formData.MS_HD || '...'} và được làm thành 02 (hai) bản, các bản có giá trị pháp lý ngang nhau, mỗi bên giữ 01 (một) bản và có hiệu lực từ ngày <strong>{formData.NGAY_HL || '...'}</strong>.
               </p>
 
-              <div className="mt-16 flex justify-between text-center">
+              <div className="mt-16 flex justify-between text-center print:mt-12">
                 <div>
                   <p className="font-bold">NGƯỜI LAO ĐỘNG</p>
                   <p>(Ký tên)</p>
@@ -267,10 +280,24 @@ export default function Home() {
           </div>
         </div>
 
-        <p className="text-center mt-8 text-sm text-gray-500">
+        <p className="text-center mt-8 text-sm text-gray-500 print:hidden">
           Dữ liệu được bảo mật và chỉ dùng để tạo file hợp đồng. Không lưu trữ.
         </p>
       </div>
+
+      {/* CSS cho in ấn đẹp */}
+      <style jsx global>{`
+        @media print {
+          body { background: white !important; }
+          .print\\:hidden { display: none !important; }
+          .print\\:p-0 { padding: 0 !important; }
+          .print\\:shadow-none { box-shadow: none !important; }
+          .print\\:rounded-none { border-radius: 0 !important; }
+          .print\\:min-h-0 { min-height: auto !important; }
+          .print\\:overflow-visible { overflow: visible !important; }
+          .print\\:mt-12 { margin-top: 3rem !important; }
+        }
+      `}</style>
     </div>
   );
 }
