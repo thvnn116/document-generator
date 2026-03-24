@@ -4,7 +4,6 @@ export const revalidate = 0;
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useRef } from 'react';
 
 const schema = z.object({
   MS_HDLD: z.string().min(1, 'Vui lòng nhập mã phụ lục'),
@@ -26,8 +25,6 @@ const schema = z.object({
 });
 
 export default function Home() {
-  const printIframeRef = useRef(null);
-
   const {
     register,
     handleSubmit,
@@ -57,72 +54,40 @@ export default function Home() {
 
   const formData = watch();
 
-  const generateDocxBlob = async (data) => {
-    const response = await fetch('/api/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) throw new Error('Lỗi tạo file');
-
-    return await response.blob();
-  };
-
   const onCreate = async (data) => {
     try {
-      const blob = await generateDocxBlob(data);
-      const url = URL.createObjectURL(blob);
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) throw new Error('Lỗi khi tạo file');
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = 'phuluc-hopdong.docx';
+      document.body.appendChild(a);
       a.click();
-      URL.revokeObjectURL(url);
+      a.remove();
+      window.URL.revokeObjectURL(url);
     } catch (err) {
-      alert('Lỗi tạo file: ' + err.message);
-    }
-  };
-
-  const onPrint = async () => {
-    try {
-      const currentData = watch();
-      const blob = await generateDocxBlob(currentData);
-      const url = URL.createObjectURL(blob);
-
-      const iframe = printIframeRef.current;
-      if (iframe) {
-        iframe.src = url;
-        iframe.onload = () => {
-          setTimeout(() => {
-            const win = iframe.contentWindow || iframe.contentDocument.defaultView;
-            if (win) {
-              win.focus();
-              win.print();
-            } else {
-              alert('Không thể in. Hãy thử lại hoặc dùng nút Tạo để tải file.');
-            }
-            // Cleanup sau khi in
-            setTimeout(() => URL.revokeObjectURL(url), 10000);
-          }, 2000); // Tăng timeout để .docx load đầy đủ
-        };
-      } else {
-        alert('Iframe không sẵn sàng. Hãy thử lại.');
-      }
-    } catch (err) {
-      alert('Lỗi chuẩn bị in: ' + err.message);
+      alert('Có lỗi khi tạo file: ' + err.message);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8 print:bg-white print:p-0">
-      <div className="max-w-7xl mx-auto print:max-w-full print:m-0">
-        <h1 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8 print:hidden">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8">
           Tạo Phụ Lục Hợp Đồng Lao Động
         </h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 print:grid-cols-1 print:gap-0">
-          {/* Form */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 print:hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Form nhập liệu */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
             <form onSubmit={handleSubmit(onCreate)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -226,32 +191,24 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="flex flex-col md:flex-row gap-4 justify-center mt-10">
+              <div className="flex justify-center mt-10">
                 <button
                   type="submit"
-                  className="w-full md:w-auto px-10 py-4 bg-red-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 transition"
+                  className="w-full md:w-auto px-12 py-4 bg-red-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 transition"
                 >
                   Tạo Phụ Lục Hợp Đồng
-                </button>
-
-                <button
-                  type="button"
-                  onClick={onPrint}
-                  className="w-full md:w-auto px-10 py-4 bg-blue-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition"
-                >
-                  In Hợp Đồng
                 </button>
               </div>
             </form>
           </div>
 
           {/* Preview realtime */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 print:shadow-none print:p-0 print:rounded-none">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center print:hidden">
+          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
               Preview Phụ Lục Hợp Đồng
             </h2>
-            <div className="prose prose-sm md:prose-base max-w-none border border-gray-200 rounded-lg p-6 bg-white min-h-[800px] overflow-auto leading-relaxed print:border-none print:p-0 print:min-h-0 print:overflow-visible">
-              <div className="text-center mb-8 print:mb-4">
+            <div className="prose prose-sm md:prose-base max-w-none border border-gray-200 rounded-lg p-6 bg-white min-h-[800px] overflow-auto leading-relaxed">
+              <div className="text-center mb-8">
                 <h3 className="text-xl font-bold uppercase">CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH</h3>
                 <p className="text-sm">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
                 <p className="text-sm">Độc Lập - Tự Do - Hạnh Phúc</p>
@@ -259,13 +216,13 @@ export default function Home() {
                 <h2 className="text-2xl font-bold mt-6">PHỤ LỤC HỢP ĐỒNG LAO ĐỘNG</h2>
               </div>
 
-              <p className="mb-6 leading-7">
+              <p className="mb-6 leading-7 text-justify">
                 Chúng tôi, một bên là Ông/Bà: <strong>LÊ DUY HOÀNG</strong> Quốc tịch: Việt Nam<br />
                 Chức vụ: GIÁM ĐỐC<br />
                 Đại diện cho: CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH
               </p>
 
-              <p className="mb-6 leading-7">
+              <p className="mb-6 leading-7 text-justify">
                 Và một bên là Ông/Bà: <strong>{formData.HO_TEN || '...'}</strong><br />
                 Quốc tịch: Việt Nam<br />
                 Ngày sinh: {formData.NGAY_SINH || '...'}<br />
@@ -278,45 +235,42 @@ export default function Home() {
                 Chuyên ngành: {formData.CHUYEN_NGANH || '...'}
               </p>
 
-              <p className="mb-6 leading-7">
+              <p className="mb-6 leading-7 text-justify">
                 Căn cứ Hợp đồng lao động số <strong>{formData.MS_HD || '...'}</strong> ký ngày <strong>{formData.NGAY_KY_HD || '...'}</strong> và nhu cầu sử dụng lao động, hai bên thỏa thuận thay đổi như sau:
               </p>
 
               <p className="font-bold mb-2">Điều 1. Nội dung thay đổi - bổ sung:</p>
-              <p className="mb-6 leading-7">
+              <p className="mb-6 leading-7 text-justify">
                 Các bên đồng ý thay đổi Hợp đồng lao động số {formData.MS_HD || '...'} như sau:<br />
                 Khoản 1, Điều 3 [Quyền lợi và nghĩa vụ của người lao động]<br />
                 - Mức lương chính theo tháng: <strong>{formData.MUC_LUONG || '...'} VNĐ</strong>
               </p>
 
               <p className="font-bold mb-2">Điều 2. Điều khoản thi hành:</p>
-              <p className="mb-6 leading-7">
+              <p className="mb-6 leading-7 text-justify">
                 Trừ những nội dung thay đổi nêu tại Điều 1, Phụ lục hợp đồng này, các nội dung khác trong hợp đồng lao động số {formData.MS_HD || '...'} không thay đổi.<br />
                 Phụ lục Hợp đồng lao động này là một phần không tách rời Hợp đồng lao động số {formData.MS_HD || '...'} và được làm thành 02 (hai) bản, các bản có giá trị pháp lý ngang nhau, mỗi bên giữ 01 (một) bản và có hiệu lực từ ngày <strong>{formData.NGAY_HL || '...'}</strong>.
               </p>
 
-              <div className="mt-16 flex justify-between text-center print:mt-12">
+              <div className="mt-16 flex justify-between text-center">
                 <div>
                   <p className="font-bold">NGƯỜI LAO ĐỘNG</p>
                   <p>(Ký tên)</p>
-                  <p className="mt-10 font-bold">{formData.HO_TEN || '...'}</p>
+                  <p className="mt-12 font-bold">{formData.HO_TEN || '...'}</p>
                 </div>
                 <div>
                   <p className="font-bold">NGƯỜI SỬ DỤNG LAO ĐỘNG</p>
                   <p>(Ký tên, đóng dấu)</p>
-                  <p className="mt-10 font-bold">LÊ DUY HOÀNG</p>
+                  <p className="mt-12 font-bold">LÊ DUY HOÀNG</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <p className="text-center mt-8 text-sm text-gray-500 print:hidden">
+        <p className="text-center mt-8 text-sm text-gray-500">
           Dữ liệu được bảo mật và chỉ dùng để tạo file hợp đồng. Không lưu trữ.
         </p>
-
-        {/* Iframe ẩn để in */}
-        <iframe ref={printIframeRef} style={{ display: 'none', width: '210mm', height: '297mm' }} />
       </div>
     </div>
   );
