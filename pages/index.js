@@ -9,10 +9,9 @@ import { vanbanTypes } from '../config/vanban-types';
 
 export default function Home() {
   const [selectedType, setSelectedType] = useState(vanbanTypes[0].code);
-
   const currentType = vanbanTypes.find(t => t.code === selectedType);
 
-  // Tạo schema động theo loại văn bản
+  // Tạo schema động
   const schema = z.object(
     currentType.fields.reduce((acc, field) => {
       acc[field] = z.string().min(1, `Vui lòng nhập ${field}`);
@@ -102,7 +101,7 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {currentType.fields.map((field) => (
                   <div key={field}>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1 capitalize">
                       {field.replace(/_/g, ' ')}
                     </label>
                     <input
@@ -126,7 +125,7 @@ export default function Home() {
             </form>
           </div>
 
-          {/* Preview realtime */}
+          {/* Preview */}
           <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
               Preview {currentType.name}
@@ -135,7 +134,6 @@ export default function Home() {
               <p className="text-gray-500 italic text-center">
                 (Preview sẽ được cập nhật theo loại văn bản và dữ liệu bạn nhập)
               </p>
-              {/* Sau này có thể mở rộng preview động theo từng loại */}
             </div>
           </div>
         </div>
