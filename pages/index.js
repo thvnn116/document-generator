@@ -37,7 +37,7 @@ export default function Home() {
   useEffect(() => {
     reset(
       currentType.fields.reduce((acc, field) => {
-        acc[field] = '';
+        acc[field] = field === 'GIOI_TINH' ? 'Nam' : '';
         return acc;
       }, {})
     );
@@ -119,11 +119,24 @@ export default function Home() {
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">
                       {getLabel(field)}
                     </label>
-                    <input
-                      {...register(field)}
-                      placeholder={`Nhập ${getLabel(field)}`}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                    />
+
+                    {/* === ĐẶC BIỆT CHO GIỚI TÍNH === */}
+                    {field === 'GIOI_TINH' ? (
+                      <select
+                        {...register(field)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-white"
+                      >
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                      </select>
+                    ) : (
+                      <input
+                        {...register(field)}
+                        placeholder={`Nhập ${getLabel(field)}`}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      />
+                    )}
+
                     {errors[field] && <p className="mt-1 text-sm text-red-600">{errors[field].message}</p>}
                   </div>
                 ))}
@@ -140,7 +153,7 @@ export default function Home() {
             </form>
           </div>
 
-          {/* Preview - Rộng tối đa */}
+          {/* Preview */}
           <div className="xl:col-span-7 bg-white rounded-3xl shadow-xl p-6">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
               Preview {currentType.name}
@@ -150,12 +163,11 @@ export default function Home() {
               className="mx-auto bg-white border border-gray-200 shadow-sm overflow-auto font-serif"
               style={{
                 width: '100%',
-                maxWidth: '950px',        // Tăng rộng hơn nữa
+                maxWidth: '950px',
                 minHeight: '950px',
-                padding: '30mm 25mm',     // Lề gần với Word template
+                padding: '30mm 25mm',
                 lineHeight: '1.65',
-                fontSize: '14.2pt',       // Giảm font nhỏ lại như file Word
-                margin: '0 auto',
+                fontSize: '14.2pt',
               }}
             >
               {selectedType === "PLHD" && (
@@ -176,7 +188,7 @@ export default function Home() {
 
                   <p className="mb-8 text-justify text-[14.2pt]">
                     Và một bên là Ông/Bà: <strong>{formData.HO_TEN || '...'}</strong><br />
-                    Ngày sinh: {formData.NGAY_SINH || '...'} Giới tính: {formData.GIOI_TINH || '...'}<br />
+                    Ngày sinh: {formData.NGAY_SINH || '...'} Giới tính: <strong>{formData.GIOI_TINH || '...'}</strong><br />
                     Nghề nghiệp: {formData.NGHE_NGHIEP || '...'} Bộ phận: {formData.BO_PHAN || '...'} Mã số: {formData.MS_NV || '...'}<br />
                     Địa chỉ thường trú: {formData.DC_THUONG_TRU || '...'}<br />
                     Số CMND/CCCD: {formData.SO_CMND || '...'} Cấp ngày: {formData.NGAY_CAP || '...'}<br />
