@@ -156,80 +156,77 @@ export default function Home() {
           </div>
 
           {/* Preview - ĐÃ LOẠI BỎ KHUNG NGOÀI, cho bung rộng tối đa */}
-          <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6">
+          <div className="bg-white rounded-2xl shadow-lg p-4">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
               Preview {currentType.name}
             </h2>
 
-            {/* Đây là phần chính, đã được làm rộng và không còn khung thừa */}
             <div 
               className="mx-auto bg-white border border-gray-200 shadow-sm overflow-auto font-serif"
               style={{
-                width: '100%',           // Bung rộng hết phần bên phải
-                maxWidth: '210mm',       // Giới hạn tối đa bằng khổ A4
-                minHeight: '297mm',
-                padding: '28mm 22mm',    // Lề chuẩn Word
-                lineHeight: '1.75',
-                fontSize: '15.5pt',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+                width: '100%',           // Bung full chiều rộng của cột
+                maxWidth: '800px',       // Giới hạn tối đa để không quá rộng trên màn hình lớn
+                minHeight: '850px',
+                padding: '35mm 25mm',    // Lề rộng hơn một chút để đẹp
+                lineHeight: '1.8',
+                fontSize: '15.8pt',
               }}
             >
+              {/* === NỘI DUNG PREVIEW === */}
               {selectedType === "PLHD" && (
                 <div>
-                  <div className="text-center mb-10">
-                    <h3 className="text-xl font-bold">CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH</h3>
-                    <p className="text-sm mt-1">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
-                    <p className="text-sm">Độc Lập - Tự Do - Hạnh Phúc</p>
-                    <p className="font-bold mt-6">Số: {formData.MS_HDLD || '...'}</p>
-                    <h2 className="text-2xl font-bold mt-8">PHỤ LỤC HỢP ĐỒNG LAO ĐỘNG</h2>
+                  <div className="text-center mb-12">
+                    <h3 className="text-2xl font-bold">CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH</h3>
+                    <p className="mt-2">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
+                    <p>Độc Lập - Tự Do - Hạnh Phúc</p>
+                    <p className="font-bold mt-8">Số: {formData.MS_HDLD || '...'}</p>
+                    <h2 className="text-3xl font-bold mt-10">PHỤ LỤC HỢP ĐỒNG LAO ĐỘNG</h2>
                   </div>
 
-                  <p className="mb-6 text-justify">
+                  <p className="mb-8 text-justify">
                     Chúng tôi, một bên là Ông/Bà: <strong>LÊ DUY HOÀNG</strong> Quốc tịch: Việt Nam<br />
                     Chức vụ: GIÁM ĐỐC<br />
                     Đại diện cho: CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH
                   </p>
 
-                  <p className="mb-6 text-justify">
+                  <p className="mb-8 text-justify">
                     Và một bên là Ông/Bà: <strong>{formData.HO_TEN || '...'}</strong><br />
                     Quốc tịch: Việt Nam<br />
                     Ngày sinh: {formData.NGAY_SINH || '...'}<br />
                     Giới tính: {formData.GIOI_TINH || '...'}<br />
                     Nghề nghiệp: {formData.NGHE_NGHIEP || '...'}<br />
-                    Bộ phận: {formData.BO_PHAN || '...'} Mã số: {formData.MS_NV || '...'}<br />
+                    Bộ phận: {formData.BO_PHAN || '...'} Mã số: {formData.MS_NV || '...'}<br />
                     Địa chỉ thường trú: {formData.DC_THUONG_TRU || '...'}<br />
-                    Số CMND: {formData.SO_CMND || '...'} Cấp ngày: {formData.NGAY_CAP || '...'}<br />
-                    Trình độ học vấn: {formData.HOC_VAN || '...'}<br />
-                    Chuyên ngành: {formData.CHUYEN_NGANH || '...'}
+                    Số CMND/CCCD: {formData.SO_CMND || '...'} Cấp ngày: {formData.NGAY_CAP || '...'}<br />
+                    Trình độ học vấn: {formData.HOC_VAN || '...'} Chuyên ngành: {formData.CHUYEN_NGANH || '...'}
                   </p>
 
-                  <p className="mb-6 text-justify">
+                  <p className="mb-8 text-justify">
                     Căn cứ Hợp đồng lao động số <strong>{formData.MS_HD || '...'}</strong> ký ngày <strong>{formData.NGAY_KY_HD || '...'}</strong> và nhu cầu sử dụng lao động, hai bên thỏa thuận thay đổi như sau:
                   </p>
 
-                  <p className="font-bold mb-2">Điều 1. Nội dung thay đổi - bổ sung:</p>
-                  <p className="mb-6 text-justify">
+                  <p className="font-bold mb-3">Điều 1. Nội dung thay đổi - bổ sung:</p>
+                  <p className="mb-8 text-justify">
                     Các bên đồng ý thay đổi Hợp đồng lao động số {formData.MS_HD || '...'} như sau:<br />
-                    Khoản 1, Điều 3 [Quyền lợi và nghĩa vụ của người lao động]<br />
                     - Mức lương chính theo tháng: <strong>{formData.MUC_LUONG || '...'} VNĐ</strong>
                   </p>
 
-                  <p className="font-bold mb-2">Điều 2. Điều khoản thi hành:</p>
-                  <p className="mb-6 text-justify">
-                    Trừ những nội dung thay đổi nêu tại Điều 1, Phụ lục hợp đồng này, các nội dung khác trong hợp đồng lao động số {formData.MS_HD || '...'} không thay đổi.<br />
-                    Phụ lục Hợp đồng lao động này là một phần không tách rời Hợp đồng lao động số {formData.MS_HD || '...'} và được làm thành 02 (hai) bản, các bản có giá trị pháp lý ngang nhau, mỗi bên giữ 01 (một) bản và có hiệu lực từ ngày <strong>{formData.NGAY_HL || '...'}</strong>.
+                  <p className="font-bold mb-3">Điều 2. Điều khoản thi hành:</p>
+                  <p className="mb-10 text-justify">
+                    Trừ những nội dung thay đổi nêu trên, các nội dung khác trong hợp đồng lao động số {formData.MS_HD || '...'} vẫn giữ nguyên.<br />
+                    Phụ lục này có hiệu lực từ ngày <strong>{formData.NGAY_HL || '...'}</strong>.
                   </p>
 
-                  <div className="mt-20 flex justify-between text-center">
+                  <div className="mt-24 flex justify-between text-center">
                     <div>
                       <p className="font-bold">NGƯỜI LAO ĐỘNG</p>
                       <p>(Ký tên)</p>
-                      <p className="mt-16 font-bold">{formData.HO_TEN || '...'}</p>
+                      <p className="mt-20 font-bold">{formData.HO_TEN || '...'}</p>
                     </div>
                     <div>
                       <p className="font-bold">NGƯỜI SỬ DỤNG LAO ĐỘNG</p>
                       <p>(Ký tên, đóng dấu)</p>
-                      <p className="mt-16 font-bold">LÊ DUY HOÀNG</p>
+                      <p className="mt-20 font-bold">LÊ DUY HOÀNG</p>
                     </div>
                   </div>
                 </div>
@@ -237,27 +234,27 @@ export default function Home() {
 
               {selectedType === "TMNV" && (
                 <div>
-                  <div className="text-center mb-10">
-                    <h3 className="text-xl font-bold uppercase">CÔNG TY TNHH TASIFISH</h3>
-                    <h2 className="text-2xl font-bold mt-6">THƯ MỜI NHẬN VIỆC</h2>
-                    <p className="font-bold mt-4">Mã số: {formData.MS_HD || '...'}</p>
+                  <div className="text-center mb-12">
+                    <h3 className="text-2xl font-bold">CÔNG TY TNHH TASIFISH</h3>
+                    <h2 className="text-3xl font-bold mt-8">THƯ MỜI NHẬN VIỆC</h2>
+                    <p className="font-bold mt-6">Mã số: {formData.MS_HD || '...'}</p>
                   </div>
 
-                  <p className="mb-6 text-justify">
+                  <p className="mb-8 text-justify">
                     {formData.DIA_DIEM || '...'}, ngày {formData.DD || '...'} tháng {formData.MM || '...'} năm {formData.YY || '...'}
                   </p>
 
-                  <p className="mb-6 text-justify">
+                  <p className="mb-8 text-justify">
                     Kính gửi Anh/Chị: <strong>{formData.HO_TEN || '...'}</strong><br />
-                    Ngày tháng năm sinh: {formData.NGAY_SINH || '...'}<br />
-                    Số điện thoại: {formData.DIEN_THOAI || '...'}<br />
+                    Ngày sinh: {formData.NGAY_SINH || '...'} Số điện thoại: {formData.DIEN_THOAI || '...'}<br />
                     Địa chỉ thường trú: {formData.DC_THUONG_TRU || '...'}
                   </p>
 
-                  <p className="mb-6 text-justify">
-                    Công Ty TNHH TASIFISH chân thành cảm ơn Anh/Chị đã quan tâm đến nhu cầu tuyển dụng và dành thời gian tiếp xúc, trao đổi với chúng tôi trong thời gian qua. Theo kết quả cuộc phỏng vấn, Công ty chúng tôi trân trọng mời Anh/Chị về cộng tác với các nội dung thỏa thuận cơ bản sau:
+                  <p className="mb-8 text-justify">
+                    Công Ty TNHH TASIFISH chân thành cảm ơn Anh/Chị đã quan tâm đến nhu cầu tuyển dụng...
                   </p>
 
+                  {/* Phần còn lại của TMNV giữ nguyên như cũ */}
                   <p className="mb-4 text-justify">
                     1. Vị trí công việc: <strong>{formData.VI_TRI_CV || '...'}</strong><br />
                     2. Địa điểm làm việc: <strong>{formData.DC_CTY || '...'}</strong><br />
@@ -266,30 +263,21 @@ export default function Home() {
                     5. Ngày nhận việc: <strong>{formData.NGAY_NHAN_VIEC || '...'}</strong>
                   </p>
 
-                  <p className="mb-6 text-justify">
-                    • Tổng lương chính thức: <strong>{formData.MUC_LUONG || '...'} VNĐ</strong><br />
-                    • Mức lương chưa bao gồm công tác phí theo thực tế phát sinh.<br />
-                    • Thử việc {formData.TG_THUVIEC || '...'} tháng nhận {formData.PT_LUONG || '...'}% mức lương chính thức, sau đó sẽ có đánh giá thử việc từ Ban Giám đốc.
-                  </p>
-
-                  <p className="mb-6 text-justify">
-                    6. Trách nhiệm và quyền hạn chính: Theo mô tả công việc <strong>{formData.VI_TRI_CV || '...'}</strong>
-                  </p>
-
                   <p className="mb-8 text-justify">
-                    Chúng tôi hân hạnh chào đón Anh/Chị làm việc tại công ty và mong nhận được phản hồi từ Anh/Chị khi nhận được thư này.
+                    • Tổng lương chính thức: <strong>{formData.MUC_LUONG || '...'} VNĐ</strong><br />
+                    • Thử việc {formData.TG_THUVIEC || '...'} tháng nhận {formData.PT_LUONG || '...'}% mức lương chính thức.
                   </p>
 
-                  <div className="mt-16 flex justify-between text-center">
+                  <div className="mt-20 flex justify-between text-center">
                     <div>
                       <p className="font-bold">NGƯỜI LAO ĐỘNG</p>
                       <p>(Ký tên)</p>
-                      <p className="mt-16 font-bold">{formData.HO_TEN || '...'}</p>
+                      <p className="mt-20 font-bold">{formData.HO_TEN || '...'}</p>
                     </div>
                     <div>
                       <p className="font-bold">CÔNG TY TNHH TASIFISH</p>
                       <p>GIÁM ĐỐC</p>
-                      <p className="mt-16 font-bold">LÊ DUY HOÀNG</p>
+                      <p className="mt-20 font-bold">LÊ DUY HOÀNG</p>
                     </div>
                   </div>
                 </div>
