@@ -11,10 +11,10 @@ export default function Home() {
   const [selectedType, setSelectedType] = useState(vanbanTypes[0].code);
   const currentType = vanbanTypes.find(t => t.code === selectedType);
 
-  // Tạo schema động
+  // Tạo schema động theo loại văn bản
   const schema = z.object(
     currentType.fields.reduce((acc, field) => {
-      acc[field] = z.string().min(1, `Vui lòng nhập ${field}`);
+      acc[field] = z.string().min(1, `Vui lòng nhập ${field.replace(/_/g, ' ')}`);
       return acc;
     }, {})
   );
@@ -37,12 +37,11 @@ export default function Home() {
 
   // Reset form khi đổi loại văn bản
   useEffect(() => {
-    reset(
-      currentType.fields.reduce((acc, field) => {
-        acc[field] = '';
-        return acc;
-      }, {})
-    );
+    const defaultValues = currentType.fields.reduce((acc, field) => {
+      acc[field] = '';
+      return acc;
+    }, {});
+    reset(defaultValues);
   }, [selectedType, reset]);
 
   const onCreate = async (data) => {
@@ -76,7 +75,7 @@ export default function Home() {
           Tạo Văn Bản Hành Chính
         </h1>
 
-        {/* Dropdown chọn loại văn bản */}
+        {/* Dropdown */}
         <div className="mb-8 flex justify-center">
           <div className="w-full max-w-md">
             <label className="block text-sm font-medium text-gray-700 mb-2">Chọn loại văn bản</label>
