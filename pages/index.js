@@ -11,10 +11,10 @@ export default function Home() {
   const [selectedType, setSelectedType] = useState(vanbanTypes[0].code);
   const currentType = vanbanTypes.find(t => t.code === selectedType);
 
-  // Tạo schema động theo loại văn bản
+  // Tạo schema động
   const schema = z.object(
     currentType.fields.reduce((acc, field) => {
-      acc[field] = z.string().min(1, `Vui lòng nhập ${field.replace(/_/g, ' ')}`);
+      acc[field] = z.string().min(1, `Vui lòng nhập ${field}`);
       return acc;
     }, {})
   );
@@ -35,14 +35,50 @@ export default function Home() {
 
   const formData = watch();
 
-  // Reset form khi đổi loại văn bản
+  // Reset form khi đổi loại
   useEffect(() => {
-    const defaultValues = currentType.fields.reduce((acc, field) => {
-      acc[field] = '';
-      return acc;
-    }, {});
-    reset(defaultValues);
+    reset(
+      currentType.fields.reduce((acc, field) => {
+        acc[field] = '';
+        return acc;
+      }, {})
+    );
   }, [selectedType, reset]);
+
+  // Label tiếng Việt đẹp
+  const getLabel = (field) => {
+    const labels = {
+      MS_HDLD: "Mã phụ lục",
+      HO_TEN: "Họ tên người lao động",
+      NGAY_SINH: "Ngày sinh",
+      GIOI_TINH: "Giới tính",
+      NGHE_NGHIEP: "Nghề nghiệp",
+      BO_PHAN: "Bộ phận",
+      MS_NV: "Mã số nhân viên",
+      DC_THUONG_TRU: "Địa chỉ thường trú",
+      SO_CMND: "Số CMND/CCCD",
+      NGAY_CAP: "Ngày cấp",
+      HOC_VAN: "Trình độ học vấn",
+      CHUYEN_NGANH: "Chuyên ngành",
+      MS_HD: "Mã hợp đồng gốc",
+      NGAY_KY_HD: "Ngày ký hợp đồng gốc",
+      MUC_LUONG: "Mức lương (VNĐ)",
+      NGAY_HL: "Ngày hiệu lực",
+
+      // Fields cho Thư mời nhận việc
+      DIA_DIEM: "Địa điểm",
+      DD: "Ngày",
+      MM: "Tháng",
+      YY: "Năm",
+      DIEN_THOAI: "Số điện thoại",
+      VI_TRI_CV: "Vị trí công việc",
+      DC_CTY: "Địa chỉ công ty",
+      NGAY_NHAN_VIEC: "Ngày nhận việc",
+      TG_THUVIEC: "Thời gian thử việc (tháng)",
+      PT_LUONG: "Phần trăm lương thử việc",
+    };
+    return labels[field] || field.replace(/_/g, ' ');
+  };
 
   const onCreate = async (data) => {
     try {
@@ -100,12 +136,12 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {currentType.fields.map((field) => (
                   <div key={field}>
-                    <label className="block text-sm font-medium text-gray-700 mb-1 capitalize">
-                      {field.replace(/_/g, ' ')}
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {getLabel(field)}
                     </label>
                     <input
                       {...register(field)}
-                      placeholder={`Nhập ${field.replace(/_/g, ' ')}`}
+                      placeholder={`Nhập ${getLabel(field)}`}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition"
                     />
                     {errors[field] && <p className="mt-1 text-sm text-red-600">{errors[field].message}</p>}
@@ -118,7 +154,7 @@ export default function Home() {
                   type="submit"
                   className="w-full md:w-auto px-12 py-4 bg-red-600 text-white font-bold text-lg rounded-xl shadow-lg hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 transition"
                 >
-                  Tạo Văn Bản
+                  Tạo {currentType.name}
                 </button>
               </div>
             </form>
