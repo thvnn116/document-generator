@@ -29,10 +29,11 @@ export default async function handler(req, res) {
     const doc = new Docxtemplater(zip, {
       paragraphLoop: true,
       linebreaks: true,
+      delimiters: { start: '{{', end: '}}' },   // ← Dòng quan trọng này
     });
 
-    // Log dữ liệu gửi lên để debug
-    console.log("Dữ liệu nhận được:", JSON.stringify(data, null, 2));
+    console.log(`Đang render template: ${typeConfig.templateFile}`);
+    console.log("Dữ liệu:", JSON.stringify(data, null, 2));
 
     doc.setData(data);
     doc.render();
@@ -47,14 +48,13 @@ export default async function handler(req, res) {
     res.send(buf);
 
   } catch (error) {
-    console.error("=== LỖI KHI RENDER DOCX ===");
+    console.error("=== LỖI RENDER DOCX ===");
     console.error(error);
 
-    // Trả về lỗi chi tiết hơn cho dễ debug
     res.status(500).json({
       error: 'Lỗi khi tạo văn bản',
       message: error.message,
-      details: error.properties || error.toString()
+      details: error.properties ? error.properties : error.toString()
     });
   }
 }
