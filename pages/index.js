@@ -87,12 +87,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-8 px-4">
-      <div className="max-w-[1400px] mx-auto">
+      <div className="max-w-[1480px] mx-auto">
         <h1 className="text-4xl font-bold text-center text-gray-800 mb-10">
           Tạo Văn Bản Hành Chính
         </h1>
 
-        {/* Dropdown */}
         <div className="flex justify-center mb-10">
           <div className="w-full max-w-md">
             <label className="block text-sm font-medium text-gray-700 mb-2">Chọn loại văn bản</label>
@@ -110,9 +109,9 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-5 gap-8">
-          {/* Form - chiếm 2 phần */}
-          <div className="xl:col-span-2 bg-white rounded-3xl shadow-xl p-8">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+          {/* Form */}
+          <div className="xl:col-span-5 bg-white rounded-3xl shadow-xl p-8">
             <form onSubmit={handleSubmit(onCreate)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {currentType.fields.map((field) => (
@@ -141,96 +140,102 @@ export default function Home() {
             </form>
           </div>
 
-          {/* Preview - chiếm 3 phần, bung rộng tối đa */}
-          <div className="xl:col-span-3 bg-white rounded-3xl shadow-xl p-6 overflow-hidden">
+          {/* Preview - Rộng tối đa */}
+          <div className="xl:col-span-7 bg-white rounded-3xl shadow-xl p-6">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
               Preview {currentType.name}
             </h2>
 
             <div 
-              className="mx-auto bg-white border border-gray-200 shadow-inner overflow-auto font-serif"
+              className="mx-auto bg-white border border-gray-200 shadow-sm overflow-auto font-serif"
               style={{
                 width: '100%',
-                maxWidth: '850px',        // Bạn có thể tăng lên 900px nếu muốn rộng hơn
-                minHeight: '920px',
-                padding: '32mm 26mm',
-                lineHeight: '1.75',
-                fontSize: '15.2pt',
+                maxWidth: '950px',        // Tăng rộng hơn nữa
+                minHeight: '950px',
+                padding: '30mm 25mm',     // Lề gần với Word template
+                lineHeight: '1.65',
+                fontSize: '14.2pt',       // Giảm font nhỏ lại như file Word
                 margin: '0 auto',
               }}
             >
-              {/* Nội dung PLHD */}
               {selectedType === "PLHD" && (
-                <div className="space-y-8">
-                  <div className="text-center">
-                    <h3 className="text-2xl font-bold">CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH</h3>
-                    <p className="mt-1">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
-                    <p>Độc Lập - Tự Do - Hạnh Phúc</p>
+                <div>
+                  <div className="text-center mb-12">
+                    <h3 className="text-[18pt] font-bold">CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH</h3>
+                    <p className="text-sm">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
+                    <p className="text-sm">Độc Lập - Tự Do - Hạnh Phúc</p>
                     <p className="font-bold mt-8">Số: {formData.MS_HDLD || '...'}</p>
-                    <h2 className="text-3xl font-bold mt-10">PHỤ LỤC HỢP ĐỒNG LAO ĐỘNG</h2>
+                    <h2 className="text-[19pt] font-bold mt-10">PHỤ LỤC HỢP ĐỒNG LAO ĐỘNG</h2>
                   </div>
 
-                  {/* Nội dung PLHD rút gọn cho dễ nhìn */}
-                  <p className="text-justify">
-                    Chúng tôi, một bên là Ông/Bà: <strong>LÊ DUY HOÀNG</strong> Quốc tịch: Việt Nam, Chức vụ: GIÁM ĐỐC, Đại diện cho Công ty.<br /><br />
+                  <p className="mb-8 text-justify text-[14.2pt]">
+                    Chúng tôi, một bên là Ông/Bà: <strong>LÊ DUY HOÀNG</strong> Quốc tịch: Việt Nam<br />
+                    Chức vụ: GIÁM ĐỐC<br />
+                    Đại diện cho: CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH
+                  </p>
+
+                  <p className="mb-8 text-justify text-[14.2pt]">
                     Và một bên là Ông/Bà: <strong>{formData.HO_TEN || '...'}</strong><br />
                     Ngày sinh: {formData.NGAY_SINH || '...'} Giới tính: {formData.GIOI_TINH || '...'}<br />
                     Nghề nghiệp: {formData.NGHE_NGHIEP || '...'} Bộ phận: {formData.BO_PHAN || '...'} Mã số: {formData.MS_NV || '...'}<br />
                     Địa chỉ thường trú: {formData.DC_THUONG_TRU || '...'}<br />
-                    Số CMND/CCCD: {formData.SO_CMND || '...'} Cấp ngày: {formData.NGAY_CAP || '...'}
+                    Số CMND/CCCD: {formData.SO_CMND || '...'} Cấp ngày: {formData.NGAY_CAP || '...'}<br />
+                    Trình độ học vấn: {formData.HOC_VAN || '...'} Chuyên ngành: {formData.CHUYEN_NGANH || '...'}
                   </p>
 
-                  <p className="text-justify">
-                    Căn cứ Hợp đồng lao động số <strong>{formData.MS_HD || '...'}</strong> ký ngày <strong>{formData.NGAY_KY_HD || '...'}</strong>, hai bên thỏa thuận thay đổi mức lương thành <strong>{formData.MUC_LUONG || '...'} VNĐ</strong> kể từ ngày <strong>{formData.NGAY_HL || '...'}</strong>.
+                  <p className="mb-8 text-justify text-[14.2pt]">
+                    Căn cứ Hợp đồng lao động số <strong>{formData.MS_HD || '...'}</strong> ký ngày <strong>{formData.NGAY_KY_HD || '...'}</strong> và nhu cầu sử dụng lao động, hai bên thỏa thuận thay đổi mức lương chính theo tháng thành <strong>{formData.MUC_LUONG || '...'} VNĐ</strong>, có hiệu lực từ ngày <strong>{formData.NGAY_HL || '...'}</strong>.
                   </p>
 
-                  <div className="mt-24 flex justify-between text-center">
+                  <div className="mt-28 flex justify-between text-center">
                     <div>
                       <p className="font-bold">NGƯỜI LAO ĐỘNG</p>
+                      <p>(Ký tên)</p>
                       <p className="mt-20 font-bold">{formData.HO_TEN || '...'}</p>
                     </div>
                     <div>
                       <p className="font-bold">NGƯỜI SỬ DỤNG LAO ĐỘNG</p>
+                      <p>(Ký tên, đóng dấu)</p>
                       <p className="mt-20 font-bold">LÊ DUY HOÀNG</p>
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Nội dung TMNV */}
               {selectedType === "TMNV" && (
-                <div className="space-y-8">
-                  <div className="text-center">
-                    <h3 className="text-2xl font-bold">CÔNG TY TNHH TASIFISH</h3>
-                    <h2 className="text-3xl font-bold mt-8">THƯ MỜI NHẬN VIỆC</h2>
+                <div>
+                  <div className="text-center mb-12">
+                    <h3 className="text-[18pt] font-bold">CÔNG TY TNHH TASIFISH</h3>
+                    <h2 className="text-[20pt] font-bold mt-8">THƯ MỜI NHẬN VIỆC</h2>
                     <p className="font-bold mt-6">Mã số: {formData.MS_HD || '...'}</p>
                   </div>
 
-                  <p className="text-justify">
+                  <p className="mb-8 text-justify text-[14.2pt]">
                     {formData.DIA_DIEM || '...'}, ngày {formData.DD || '...'} tháng {formData.MM || '...'} năm {formData.YY || '...'}
                   </p>
 
-                  <p className="text-justify">
+                  <p className="mb-8 text-justify text-[14.2pt]">
                     Kính gửi Anh/Chị: <strong>{formData.HO_TEN || '...'}</strong><br />
                     Ngày sinh: {formData.NGAY_SINH || '...'} Số điện thoại: {formData.DIEN_THOAI || '...'}<br />
                     Địa chỉ thường trú: {formData.DC_THUONG_TRU || '...'}
                   </p>
 
-                  <p className="text-justify">
+                  <p className="mb-8 text-justify text-[14.2pt]">
                     Công Ty TNHH TASIFISH chân thành cảm ơn Anh/Chị đã quan tâm đến nhu cầu tuyển dụng...
                   </p>
 
-                  <p className="text-justify">
+                  <p className="mb-8 text-justify text-[14.2pt]">
                     1. Vị trí công việc: <strong>{formData.VI_TRI_CV || '...'}</strong><br />
                     2. Địa điểm làm việc: <strong>{formData.DC_CTY || '...'}</strong><br />
                     5. Ngày nhận việc: <strong>{formData.NGAY_NHAN_VIEC || '...'}</strong><br />
-                    • Tổng lương: <strong>{formData.MUC_LUONG || '...'} VNĐ</strong><br />
-                    • Thử việc {formData.TG_THUVIEC || '...'} tháng nhận {formData.PT_LUONG || '...'}% lương chính thức.
+                    • Tổng lương chính thức: <strong>{formData.MUC_LUONG || '...'} VNĐ</strong><br />
+                    • Thử việc {formData.TG_THUVIEC || '...'} tháng nhận {formData.PT_LUONG || '...'}% mức lương chính thức.
                   </p>
 
-                  <div className="mt-20 flex justify-between text-center">
+                  <div className="mt-24 flex justify-between text-center">
                     <div>
                       <p className="font-bold">NGƯỜI LAO ĐỘNG</p>
+                      <p>(Ký tên)</p>
                       <p className="mt-20 font-bold">{formData.HO_TEN || '...'}</p>
                     </div>
                     <div>
