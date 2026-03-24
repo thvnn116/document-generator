@@ -155,20 +155,23 @@ export default function Home() {
             </form>
           </div>
 
-          {/* Preview rộng đẹp hơn - A4 style */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+          {/* Preview - ĐÃ LOẠI BỎ KHUNG NGOÀI, cho bung rộng tối đa */}
+          <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
               Preview {currentType.name}
             </h2>
-            
+
+            {/* Đây là phần chính, đã được làm rộng và không còn khung thừa */}
             <div 
-              className="mx-auto bg-white border border-gray-300 shadow-inner overflow-auto font-serif"
+              className="mx-auto bg-white border border-gray-200 shadow-sm overflow-auto font-serif"
               style={{
-                width: '210mm',
+                width: '100%',           // Bung rộng hết phần bên phải
+                maxWidth: '210mm',       // Giới hạn tối đa bằng khổ A4
                 minHeight: '297mm',
-                padding: '25mm 20mm',
-                lineHeight: '1.7',
-                fontSize: '15.2pt',
+                padding: '28mm 22mm',    // Lề chuẩn Word
+                lineHeight: '1.75',
+                fontSize: '15.5pt',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
               }}
             >
               {selectedType === "PLHD" && (
