@@ -18,6 +18,11 @@ export default async function handler(req, res) {
     }
 
     const templatePath = path.join(process.cwd(), 'templates', typeConfig.templateFile);
+
+    if (!fs.existsSync(templatePath)) {
+      return res.status(404).json({ error: `Không tìm thấy template: ${typeConfig.templateFile}` });
+    }
+
     const content = fs.readFileSync(templatePath, 'binary');
     const zip = new PizZip(content);
 
@@ -25,6 +30,9 @@ export default async function handler(req, res) {
       paragraphLoop: true,
       linebreaks: true,
     });
+
+    // Log dữ liệu gửi lên để debug
+    console.log("Dữ liệu nhận được:", JSON.stringify(data, null, 2));
 
     doc.setData(data);
     doc.render();
@@ -37,8 +45,16 @@ export default async function handler(req, res) {
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     res.setHeader('Content-Disposition', `attachment; filename=${typeConfig.templateFile}`);
     res.send(buf);
+
   } catch (error) {
+    console.error("=== LỖI KHI RENDER DOCX ===");
     console.error(error);
-    res.status(500).json({ error: 'Lỗi khi tạo văn bản: ' + error.message });
+
+    // Trả về lỗi chi tiết hơn cho dễ debug
+    res.status(500).json({
+      error: 'Lỗi khi tạo văn bản',
+      message: error.message,
+      details: error.properties || error.toString()
+    });
   }
 }
