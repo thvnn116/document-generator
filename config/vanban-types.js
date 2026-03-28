@@ -9,7 +9,6 @@ export const vanbanTypes = [
       "BO_PHAN", "MS_NV", "DC_THUONG_TRU", "SO_CMND", "NGAY_CAP",
       "HOC_VAN", "CHUYEN_NGANH", "MS_HD", "NGAY_KY_HD", "MUC_LUONG", "NGAY_HL"
     ],
-    // Preview template (có thể chỉnh sửa sau)
     previewTemplate: `
       <div class="text-center mb-12">
         <h3 class="text-[18pt] font-bold">CÔNG TY CỔ PHẦN XUẤT NHẬP KHẨU TASIFISH</h3>
