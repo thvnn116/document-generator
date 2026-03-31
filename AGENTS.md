@@ -1,7 +1,7 @@
 # AGENTS.md - Hướng dẫn cho AI & Người phát triển
 
 ## Mục đích
-File này giúp AI (như Grok) và các developer mới hiểu nhanh cấu trúc dự án "document-generator" – một công cụ tạo văn bản hành chính động bằng Next.js + docxtemplater.
+File này giúp AI (như Grok) và các developer mới hiểu nhanh cấu trúc dự án **document-generator** – một công cụ tạo văn bản hành chính động bằng Next.js + docxtemplater.
 
 ## Công nghệ chính
 - **Framework**: Next.js 14 (Pages Router)
@@ -24,8 +24,7 @@ File này giúp AI (như Grok) và các developer mới hiểu nhanh cấu trúc
 │       └── generate.js          ← API xử lý tạo file Word
 ├── public/
 └── package.json
-
-## Quy tắc quan trọng khi thêm loại văn bản mới
+text## Quy tắc quan trọng khi thêm loại văn bản mới
 
 Mỗi loại văn bản được định nghĩa trong `config/vanban-types.js` dưới dạng **1 object** với các trường sau:
 
@@ -47,3 +46,36 @@ Mỗi loại văn bản được định nghĩa trong `config/vanban-types.js` d
   fields: ["HO_TEN", "NGAY_SINH", "LY_DO_NGHI", "NGAY_NGHI", "SO_NGAY"],
   previewTemplate: `... nội dung HTML preview ...`
 }
+Luồng hoạt động chính
+
+Người dùng chọn loại văn bản từ dropdown
+Form tự động render theo danh sách fields
+Preview tự động cập nhật realtime theo previewTemplate
+Khi bấm "Tạo", dữ liệu được gửi đến /api/generate
+API load template tương ứng và thay thế placeholder
+Trả về file .docx để tải về
+
+Lưu ý quan trọng
+
+Tất cả placeholder trong file .docx phải dùng định dạng {{FIELD_NAME}}
+Trong api/generate.js đã thiết lập delimiters: { start: '{{', end: '}}' }
+Khi thêm loại mới, phải đặt đúng tên file .docx vào thư mục templates/
+
+Liên hệ & Hỗ trợ
+Repo này đang được phát triển cùng Grok (xAI).
+Khi cần hỗ trợ code, hãy gửi link repo và mô tả rõ tính năng muốn thêm/sửa.
+Cập nhật lần cuối: 31/03/2026
+text---
+
+**Hướng dẫn nhanh:**
+1. Mở file `AGENTS.md` trên GitHub
+2. Nhấn **Edit**
+3. Xóa hết nội dung cũ
+4. Paste toàn bộ nội dung trên vào
+5. Commit
+
+Bạn làm xong thì gửi ảnh lại cho mình kiểm tra lần cuối nhé.
+
+Muốn mình chỉnh thêm gì (ví dụ: thêm phần nào, rút gọn, hoặc thay đổi giọng văn) thì cứ nói.  
+
+Bạn paste thử đi!
