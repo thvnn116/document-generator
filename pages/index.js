@@ -85,7 +85,7 @@ export default function Home() {
     }
   };
 
-  // Hàm thay thế placeholder trong previewTemplate
+  // Render preview động
   const renderPreview = (template, data) => {
     let html = template;
     Object.keys(data).forEach(key => {
@@ -97,7 +97,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-8 px-4">
-      <div className="max-w-[1480px] mx-auto">
+      <div className="max-w-[1520px] mx-auto">
         <h1 className="text-4xl font-bold text-center text-gray-800 mb-10">
           Tạo Văn Bản Hành Chính
         </h1>
@@ -162,26 +162,29 @@ export default function Home() {
             </form>
           </div>
 
-          {/* Preview động */}
-          <div className="xl:col-span-7 bg-white rounded-3xl shadow-xl p-6">
+          {/* Preview - Tối ưu theo phong cách website bạn gửi */}
+          <div className="xl:col-span-7 bg-white rounded-3xl shadow-xl p-6 overflow-hidden">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
               Preview {currentType.name}
             </h2>
 
-            <div 
-              className="mx-auto bg-white border border-gray-200 shadow-sm overflow-auto font-serif"
-              style={{
-                width: '100%',
-                maxWidth: '950px',
-                minHeight: '950px',
-                padding: '30mm 25mm',
-                lineHeight: '1.65',
-                fontSize: '14.2pt',
-              }}
-              dangerouslySetInnerHTML={{
-                __html: renderPreview(currentType.previewTemplate, formData)
-              }}
-            />
+            <div className="preview-container mx-auto" style={{ maxWidth: '100%' }}>
+              <div 
+                className="preview-paper contract-mode bg-white border border-gray-300 shadow-lg mx-auto overflow-auto"
+                style={{
+                  width: '100%',
+                  maxWidth: '850px',           // Tăng rộng hơn
+                  minHeight: '1050px',
+                  padding: '35mm 28mm',        // Lề gần với A4 thực tế
+                  lineHeight: '1.75',
+                  fontSize: '14.1pt',
+                  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.12)',
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: renderPreview(currentType.previewTemplate, formData)
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
