@@ -85,6 +85,7 @@ export default function Home() {
     }
   };
 
+  // Render preview động
   const renderPreview = (template, data) => {
     let html = template;
     Object.keys(data).forEach(key => {
@@ -161,26 +162,29 @@ export default function Home() {
             </form>
           </div>
 
-          {/* Preview - Đã tối ưu chữ ký */}
+          {/* Preview - Tối ưu theo phong cách website bạn gửi */}
           <div className="xl:col-span-7 bg-white rounded-3xl shadow-xl p-6 overflow-hidden">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
               Preview {currentType.name}
             </h2>
 
-            <div 
-              className="preview-paper mx-auto bg-white border border-gray-300 shadow-sm overflow-auto font-serif"
-              style={{
-                width: '100%',
-                maxWidth: '880px',
-                minHeight: '1050px',
-                padding: '32mm 26mm',
-                lineHeight: '1.72',
-                fontSize: '14.1pt',
-              }}
-              dangerouslySetInnerHTML={{
-                __html: renderPreview(currentType.previewTemplate, formData)
-              }}
-            />
+            <div className="preview-container mx-auto" style={{ maxWidth: '100%' }}>
+              <div 
+                className="preview-paper contract-mode bg-white border border-gray-300 shadow-lg mx-auto overflow-auto"
+                style={{
+                  width: '100%',
+                  maxWidth: '850px',           // Tăng rộng hơn
+                  minHeight: '1050px',
+                  padding: '35mm 28mm',        // Lề gần với A4 thực tế
+                  lineHeight: '1.75',
+                  fontSize: '14.1pt',
+                  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.12)',
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: renderPreview(currentType.previewTemplate, formData)
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
